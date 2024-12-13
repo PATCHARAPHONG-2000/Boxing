@@ -2,161 +2,41 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-
-    <link rel="stylesheet" href="../../plugins/bootstrap-5/css/bootstrap.min.css" />
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
-    <link rel="stylesheet" href="../../assets/css/index.css">
-
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="../../assets/css/adminlte.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- Datatables -->
+    <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 
 </head>
 
-<body>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-header">BOXING</div>
-        <a href="#">หน้าหลัก</a>
-        <a href="#scoreConfirmation">หน้ายืนยันคะแนน</a>
-    </div>
-
-    <!-- Main content -->
-    <div class="content">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="header"></div>
-                            <div class="row gx-3 gy-3">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h1 class="text-center">กรอกข้อมูลนักกีฬา</h1>
-                                            <form id="matchForm">
-                                                <div class="mb-3 d-flex align-items-center">
-                                                    <!-- ปุ่มเลือกประเภทมวย -->
-                                                    <div class="dropdown me-2">
-                                                        <button class="btn btn-success btn-sm dropdown-toggle"
-                                                            type="button" id="dropdownMatchType"
-                                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                                            เลือกประเภทมวย
-                                                        </button>
-                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMatchType">
-                                                            <li>
-                                                                <a class="dropdown-item" href="#"
-                                                                    onclick="selectMatchType('มวยสมัครเล่น')">มวยสมัครเล่น</a>
-                                                            </li>
-                                                            <li>
-                                                                <a class="dropdown-item" href="#"
-                                                                    onclick="selectMatchType('มวยอาชีพ')">มวยอาชีพ</a>
-                                                            </li>
-                                                        </ul>
-                                                        <input type="hidden" id="Match_Type" name="Match_Type"
-                                                            required />
-                                                    </div>
-
-                                                    <!-- ปุ่มลบข้อมูล -->
-                                                    <button class="btn btn-warning btn-sm" id="clearDataButton"
-                                                        onclick="clearAllData()">
-                                                        ลบข้อมูลทั้งหมด
-                                                    </button>
-                                                </div>
-
-                                                <!-- ชื่อแมตช์ (col-12) -->
-                                                <div class="mb-3">
-                                                    <label for="Match_Name" class="form-label">ชื่อแมตช์
-                                                        <span style="color: red">*</span></label>
-                                                    <input type="text" class="form-control" id="Match_Name"
-                                                        name="Match_Name" required />
-                                                    <button type="button" class="btn btn-success btn-sm me-2 mt-2"
-                                                        id="lockMatchNameButton" onclick="saveMatchName()">
-                                                        บันทึก
-                                                    </button>
-                                                    <button type="button" class="btn btn-warning btn-sm mt-2"
-                                                        id="editMatchNameButton" onclick="toggleEdit()">
-                                                        แก้ไข
-                                                    </button>
-                                                </div>
-
-                                                <div class="row">
-                                                    <!-- ชื่อมุมสีแดง (col-6) -->
-                                                    <div class="col-lg-6">
-                                                        <div class="mb-3">
-                                                            <label for="Person_Red" class="form-label">ชื่อมุมสีแดง
-                                                                <span style="color: red">*</span></label>
-                                                            <input type="text" class="form-control" id="Person_Red"
-                                                                name="Person_Red" required />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="Image_Red"
-                                                                class="form-label">เลือกรูปมุมสีแดง</label>
-                                                            <input type="file" class="form-control" id="Image_Red"
-                                                                name="Image_Red" />
-                                                        </div>
-                                                    </div>
-
-                                                    <!-- ชื่อมุมสีน้ำเงิน (col-6) -->
-                                                    <div class="col-lg-6">
-                                                        <div class="mb-3">
-                                                            <label for="Person_Blue" class="form-label">ชื่อมุมสีน้ำเงิน
-                                                                <span style="color: red">*</span></label>
-                                                            <input type="text" class="form-control" id="Person_Blue"
-                                                                name="Person_Blue" required />
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="Image_Blue"
-                                                                class="form-label">เลือกรูปมุมสีน้ำเงิน</label>
-                                                            <input type="file" class="form-control" id="Image_Blue"
-                                                                name="Image_Blue" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- ปุ่มบันทึก -->
-                                                <button type="submit" class="btn btn-primary btn-custom">
-                                                    บันทึก
-                                                </button>
-                                            </form>
-                                        </div>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <div id="sidebar"></div>
+        <div class="content-wrapper pt-3">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow">
+                                <div class="card-header shadow">
+                                    <h2 class="mb-3">
+                                       <!-- ใส่หัวข้อ -->
+                                    </h2>
+                                    <div class="mb-3 d-flex align-items-center">
+                                       <!-- ใส่รายละเอียด -->
                                     </div>
                                 </div>
-                            </div>
-                            <!-- OUTPUT Section -->
-                            <div class="row mt-3">
-                                <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h1 class="text-center">ตารางแสดงข้อมูลนักกีฬา</h1>
-                                            <div class="row mt-3">
-                                                <div class="col-12">
-                                                    <div class="card">
-                                                        <table id="matchDataTable"
-                                                            class="table table-bordered mt-3 display">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>ลำดับที่</th>
-                                                                    <th>ชื่อฝ่ายสีแดง</th>
-                                                                    <th>ชื่อฝ่ายสีน้ำเงิน</th>
-                                                                    <th>รูปสีแดง</th>
-                                                                    <th>รูปสีน้ำเงิน</th>
-                                                                    <th>ลบ/แก้ไข</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="matchTableBody">
-                                                                <!-- ตารางจะแสดงข้อมูลที่เพิ่มเข้ามา -->
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+                                <div class="card-body">
+                                    <!-- ใส่ส่วนเนื้อหา -->
                                 </div>
                             </div>
                         </div>
@@ -164,43 +44,55 @@
                 </div>
             </div>
         </div>
+        <div id="footer"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <!-- scripts -->
+    <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="../../assets/js/adminlte.min.js"></script>
+    <script src="../../assets/js/index.js"></script>
 
-    <script src="../../plugins/bootstrap-5/js/bootstrap.bundle.min.js"></script>
-
+    <!-- datatables -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 
     <script>
-        // ดึงข้อมูล JSON จาก PHP
-        fetch('http://127.0.0.1/BOXING/service/get_data/get_data_spps.php')
-            .then(response => response.json())
+        // โหลด Sidebar
+        fetch('../includes/sidebar.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
             .then(data => {
-                // แสดงข้อมูลในตาราง
-                const matchTableBody = document.getElementById('matchTableBody');
-                data.forEach((match, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${match.Person_Red}</td>
-                        <td>${match.Person_Blue}</td>
-                        <td><img src="${match.Image_Red}" alt="${match.Person_Red}" style="width: 100px; height: 100px; object-fit: cover;"></td>
-                        <td><img src="${match.Image_Blue}" alt="${match.Person_Blue}" style="width: 100px; height: 100px; object-fit: cover;"></td>
-                        <td>
-                            <button type="button" class="btn btn-info btn-sm me-2" onclick="editMatch(${index})">
-                                <i class="fas fa-edit"></i> แก้ไข
-                            </button>
-                            <button type="button" class="btn btn-danger btn-sm" onclick="deleteMatch(${index})">
-                                <i class="fas fa-trash"></i> ลบ
-                            </button>
-                        </td>
-                    `;
-            })})
+                document.getElementById('sidebar').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading sidebar:', error);
+            });
+
+        // โหลด Footer
+        fetch('../includes/footer.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
     </script>
-    
+
 </body>
 
 </html>
