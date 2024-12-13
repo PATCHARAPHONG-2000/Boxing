@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +9,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome สำหรับ hamburger icon -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
+
 
     <style>
         body {
@@ -33,30 +35,31 @@
             display: flex;
             align-items: center;
             /* เดิมเป็น justify-content: space-between; ตอนนี้ให้จัดเรียงชิดซ้าย */
-            justify-content: start; 
+            justify-content: start;
             padding: 7.5px 15px;
             border-bottom: 1px solid #dee2e6;
             background: #fff;
-            gap: 120px; /* เว้นระยะระหว่าง BOXING กับไอคอนเมนู */
+            gap: 120px;
+            /* เว้นระยะระหว่าง BOXING กับไอคอนเมนู */
         }
 
         .top-nav .title {
-            font-size: 2.5rem; 
+            font-size: 2.5rem;
             font-weight: 100;
-             
+
         }
 
         .top-nav .menu-icon {
             font-size: 2.5rem;
             cursor: pointer;
-            
+
         }
 
         .sidebar {
-            height: calc(100vh - 50px); 
+            height: calc(100vh - 50px);
             width: 250px;
             position: fixed;
-            top: 100px; 
+            top: 100px;
             left: 0;
             background-color: #fff;
             border-right: 1px solid #dee2e6;
@@ -70,11 +73,11 @@
             padding: 10px 20px;
             text-decoration: none;
             font-size: 17px;
-            gap: 30px; 
+            gap: 30px;
         }
 
         .sidebar a:hover {
-            background-color: #f8f9fa; 
+            background-color: #f8f9fa;
         }
 
         .sidebar a img {
@@ -87,134 +90,35 @@
         }
 
         .content {
-            margin-left: 260px; 
+            margin-left: 260px;
             padding: 15px;
-            margin-top: 10px; 
-            background: #ffffff; 
+            margin-top: 10px;
+            background: #ffffff;
         }
 
         .page-title-container {
-            background: #dedede; 
+            background: #dedede;
             padding: 20px 20px;
             margin-bottom: 20px;
-            font-size: 2rem;  
-            font-weight: bold; 
-            border-radius: 10px; 
+            font-size: 2rem;
+            font-weight: bold;
+            border-radius: 10px;
         }
 
-        .round-card, .summary-card {
-            border: 1px solid #ccc; 
-            border-radius: 10px; 
-            margin-bottom: 20px; 
-            position: relative;
-        }
 
-        .round-card h3, .summary-card h3 {
-            font-size: 1.25rem; 
-            font-weight: bold; 
-            text-align: center; 
-            margin-top: 10px; 
-            margin-bottom: 10px;
-        }
-
-        .red-side, .blue-side {
-            width: 50%; 
-            float: left;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .red-side {
-            background: #ff0000;
-            color: #fff;
-            border-top-left-radius: 10px; 
-            border-bottom-left-radius: 10px;
-        }
-
-        .blue-side {
-            background: #0000ff;
-            color: #fff;
-            border-top-right-radius: 10px; 
-            border-bottom-right-radius: 10px;
-        }
-
-        .summary-red, .summary-blue {
-            width: 50%; 
-            float: left;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .summary-red {
-            background: #ff0000;
-            color: #fff;
-            border-top-left-radius: 10px; 
-            border-bottom-left-radius: 10px;
-        }
-
-        .summary-blue {
-            background: #0000ff;
-            color: #fff;
-            border-top-right-radius: 10px; 
-            border-bottom-right-radius: 10px;
-            text-align: center
-        }
-
-        .judge-label {
-            font-size: 0.9rem;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .edit-icon {
+        .edit-icon{
             position: absolute;
             top: 5px;
-            right: 5px;
+            right: 20px;
             cursor: pointer;
             font-size: 1rem;
-            color: #000;
-            background: #fff;
-            border-radius: 50%;
-            width: 25px; 
-            height: 25px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
+            color: #ffffff;
         }
 
-        .btn-save {
-            background: #FFA500; 
-            color: #000; 
-            border: none; 
-            width: 100%; 
-            margin-top: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem; /* ลดขนาดตัวอักษร */
-            padding: 8px; /* ลดขนาด padding */
-            align-self: center; /* จัดตำแหน่งปุ่มให้อยู่ตรงกลาง */
-            max-width: 150px; /* จำกัดความกว้างของปุ่ม */
-        }
-
-        .clearfix::after {
-            content: "";
-            display: block;
-            clear: both;
-        }
-
-        #successAlert {
-            display: none;
-            position: fixed;
-            top: 50px; 
-            right: 30px;
-            z-index: 1000; 
-        }
-        .round{
-            text-align: center;
-            justify-content:center;
-        }
     </style>
+
 </head>
+
 <body>
 
     <!-- Top Navbar -->
@@ -258,7 +162,8 @@
         <!-- Alert for Save Success -->
         <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>บันทึกสำเร็จ</strong> บันทึกข้อมูลสำเร็จ
-            <button type="button" class="close" onclick="document.getElementById('successAlert').style.display='none';" aria-label="Close">
+            <button type="button" class="close" onclick="document.getElementById('successAlert').style.display='none';"
+                aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
         </div>
@@ -268,28 +173,34 @@
             <div class="row">
                 <!-- ยกที่ 1 -->
                 <div class="col-md-4">
-                    <div class="round-card">
-                        <div class="edit-icon">✎</div>
-                        <h3 class="round">ยกที่ 1</h3>
-                        <div class="red-side">
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
+                    <div class="round-card p-3" style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
+                        <a href="">
+                            <div class="edit-icon">
+                                <i class="fa-regular fa-pen-to-square fa-xl"></i>
+                            </div>
+                        </a>
+                        <h1 class="round text-center text-white">ยกที่ 1</h1>
+                        <div class="row">
+                            <div class="red-side col-6 ">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
+                            <div class="blue-side col-6">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
                         </div>
-                        <div class="blue-side">
-                            
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
                         </div>
-                        <div class="clearfix"></div>
-                        <button class="btn-save">บันทึก</button>
                     </div>
                 </div>
 
@@ -307,7 +218,6 @@
                             <input type="number" class="form-control mb-2">
                         </div>
                         <div class="blue-side">
-                            
                             <label class="judge-label">JUDGE 1</label>
                             <input type="number" class="form-control mb-2">
                             <label class="judge-label">JUDGE 2</label>
@@ -334,7 +244,6 @@
                             <input type="number" class="form-control mb-2">
                         </div>
                         <div class="blue-side">
-                            
                             <label class="judge-label">JUDGE 1</label>
                             <input type="number" class="form-control mb-2">
                             <label class="judge-label">JUDGE 2</label>
@@ -364,7 +273,6 @@
                             <input type="number" class="form-control mb-2">
                         </div>
                         <div class="blue-side">
-                            <h3>&nbsp;</h3>
                             <label class="judge-label">JUDGE 1</label>
                             <input type="number" class="form-control mb-2">
                             <label class="judge-label">JUDGE 2</label>
@@ -391,7 +299,6 @@
                             <input type="number" class="form-control mb-2">
                         </div>
                         <div class="blue-side">
-                            <h3>&nbsp;</h3>
                             <label class="judge-label">JUDGE 1</label>
                             <input type="number" class="form-control mb-2">
                             <label class="judge-label">JUDGE 2</label>
@@ -436,6 +343,9 @@
 
 
     <script src="../../plugins/bootstrap-5/js/bootstrap.bundle.min.js"></script>
+    <script src="https://kit.fontawesome.com/86e67b6ecc.js" crossorigin="anonymous"></script>
+
+
     <script>
         const saveButtons = document.querySelectorAll('.btn-save');
         const successAlert = document.getElementById('successAlert');
@@ -450,4 +360,5 @@
         });
     </script>
 </body>
+
 </html>
