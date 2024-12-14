@@ -2,164 +2,60 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้ายืนยันคะแนน</title>
-    <link rel="stylesheet" href="../../plugins/bootstrap-5/css/bootstrap.min.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome สำหรับ hamburger icon -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
-
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="../../assets/css/adminlte.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- Datatables -->
+    <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            overflow-x: hidden;
-            overflow-y: scroll;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background-color: transparent;
-        }
-
-        /* Top Navbar */
-        .top-nav {
-            display: flex;
-            align-items: center;
-            /* เดิมเป็น justify-content: space-between; ตอนนี้ให้จัดเรียงชิดซ้าย */
-            justify-content: start;
-            padding: 7.5px 15px;
-            border-bottom: 1px solid #dee2e6;
-            background: #fff;
-            gap: 120px;
-            /* เว้นระยะระหว่าง BOXING กับไอคอนเมนู */
-        }
-
-        .top-nav .title {
-            font-size: 2.5rem;
-            font-weight: 100;
-
-        }
-
-        .top-nav .menu-icon {
-            font-size: 2.5rem;
-            cursor: pointer;
-
-        }
-
-        .sidebar {
-            height: calc(100vh - 50px);
-            width: 250px;
+        .round-card:nth-child(1) {
+            margin-bottom: 30px;
+        }#successAlert {
             position: fixed;
-            top: 100px;
-            left: 0;
-            background-color: #fff;
-            border-right: 1px solid #dee2e6;
-            padding-top: 20px;
-        }
-
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            color: #000;
-            padding: 10px 20px;
-            text-decoration: none;
-            font-size: 17px;
-            gap: 30px;
-        }
-
-        .sidebar a:hover {
-            background-color: #f8f9fa;
-        }
-
-        .sidebar a img {
-            width: 20px;
-            height: 20px;
-        }
-
-        .sidebar a:not(:last-child) {
-            margin-bottom: 3.5px;
-        }
-
-        .content {
-            margin-left: 260px;
-            padding: 15px;
-            margin-top: 10px;
-            background: #ffffff;
-        }
-
-        .page-title-container {
-            background: #dedede;
-            padding: 20px 20px;
-            margin-bottom: 20px;
-            font-size: 2rem;
-            font-weight: bold;
-            border-radius: 10px;
-        }
-
-
-        .edit-icon{
+            top: 15px;
+            right: 15px;
+            z-index: 9999;
+            display: none;
+        }.edit-icon {
             position: absolute;
-            top: 5px;
-            right: 20px;
+            top: 7px;
+            right: 15px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 1.2rem;
             color: #ffffff;
         }
-
     </style>
 
 </head>
 
-<body>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <div id="sidebar"></div>
+        <div class="content-wrapper pt-3">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow">
+                                <div class="card-header shadow">
+                                    <h2 class="mb-3">
+                                       หน้ายืนยันคะแนน
+                                    </h2>
+                                    <div class="mb-3 d-flex align-items-center">
+                                       <!-- ใส่รายละเอียด -->
+                                    </div>
+                                </div>
 
-    <!-- Top Navbar -->
-    <div class="top-nav">
-        <div class="title">BOXING</div>
-        <div class="menu-icon">
-            <i class="fas fa-bars"></i>
-        </div>
-    </div>
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <a href="#">
-            <img src="settings-icon-symbol-design-illustration-vector.jpg" alt="icon">
-            หน้าหลัก
-        </a>
-        <a href="#">
-            <img src="edit-text.png" alt="icon">
-            เพิ่มข้อมูลนักกีฬา
-        </a>
-        <a href="#">
-            <img src="edit-text.png" alt="icon">
-            หน้ายืนยันคะแนน
-        </a>
-        <a href="#">
-            <img src="edit-text.png" alt="icon">
-            กรอกคะแนน Manual
-        </a>
-        <a href="#">
-            <img src="edit-text.png" alt="icon">
-            เปิดหน้า Score
-        </a>
-    </div>
-
-    <div class="content">
-        <!-- Title Section -->
-        <div class="page-title-container">
-            หน้ายืนยันคะแนน
-        </div>
-
-        <!-- Alert for Save Success -->
+                                <div class="card-body">
+                                    
         <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert">
             <strong>บันทึกสำเร็จ</strong> บันทึกข้อมูลสำเร็จ
             <button type="button" class="close" onclick="document.getElementById('successAlert').style.display='none';"
@@ -169,7 +65,7 @@
         </div>
 
         <div class="container-fluid">
-            <!-- แถวแรก: ยกที่ 1, 2, 3 -->
+            
             <div class="row">
                 <!-- ยกที่ 1 -->
                 <div class="col-md-4">
@@ -199,166 +95,239 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mt-3">
-                            <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
+                            <button class="btn btn-warning btn-save" style="width: 120px;">บันทึก</button>
                         </div>
                     </div>
                 </div>
 
-                <!-- ยกที่ 2 -->
                 <div class="col-md-4">
-                    <div class="round-card">
-                        <div class="edit-icon">✎</div>
-                        <h3 class="round">ยกที่ 2</h3>
-                        <div class="red-side">
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
+                    <div class="round-card p-3" style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
+                        <a href="">
+                            <div class="edit-icon">
+                                <i class="fa-regular fa-pen-to-square fa-xl"></i>
+                            </div>
+                        </a>
+                        <h1 class="round text-center text-white">ยกที่ 2</h1>
+                        <div class="row">
+                            <div class="red-side col-6 ">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
+                            <div class="blue-side col-6">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
                         </div>
-                        <div class="blue-side">
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning btn-save" style="width: 120px;">บันทึก</button>
                         </div>
-                        <div class="clearfix"></div>
-                        <button class="btn-save">บันทึก</button>
                     </div>
                 </div>
-
-                <!-- ยกที่ 3 -->
                 <div class="col-md-4">
-                    <div class="round-card">
-                        <div class="edit-icon">✎</div>
-                        <h3 class="round">ยกที่ 3</h3>
-                        <div class="red-side">
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
+                    <div class="round-card p-3" style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
+                        <a href="">
+                            <div class="edit-icon">
+                                <i class="fa-regular fa-pen-to-square fa-xl"></i>
+                            </div>
+                        </a>
+                        <h1 class="round text-center text-white">ยกที่ 3</h1>
+                        <div class="row">
+                            <div class="red-side col-6 ">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
+                            <div class="blue-side col-6">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
                         </div>
-                        <div class="blue-side">
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning btn-save" style="width: 120px;">บันทึก</button>
                         </div>
-                        <div class="clearfix"></div>
-                        <button class="btn-save">บันทึก</button>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="round-card p-3" style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
+                        <a href="">
+                            <div class="edit-icon">
+                                <i class="fa-regular fa-pen-to-square fa-xl"></i>
+                            </div>
+                        </a>
+                        <h1 class="round text-center text-white">ยกที่ 4</h1>
+                        <div class="row">
+                            <div class="red-side col-6 ">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
+                            <div class="blue-side col-6">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning btn-save" style="width: 120px;">บันทึก</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="round-card p-3" style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
+                        <a href="">
+                            <div class="edit-icon">
+                                <i class="fa-regular fa-pen-to-square fa-xl"></i>
+                            </div>
+                        </a>
+                        <h1 class="round text-center text-white">ยกที่ 5</h1>
+                        <div class="row">
+                            <div class="red-side col-6 ">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
+                            <div class="blue-side col-6">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning btn-save" style="width: 120px;">บันทึก</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="round-card p-3" style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
+                        <a href="">
+                            <div class="edit-icon">
+                                <i class="fa-regular fa-pen-to-square fa-xl"></i>
+                            </div>
+                        </a>
+                        <h1 class="round text-center text-white">สรุปคะแนน</h1>
+                        <div class="row">
+                            <div class="red-side col-6 ">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
+                            <div class="blue-side col-6">
+                                <label class="text-white"  lable="judge">JUDGE 1</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 2</label>
+                                <input type="number" class="form-control mb-2">
+                                <label class="text-white"  lable="judge">JUDGE 3</label>
+                                <input type="number" class="form-control mb-2">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning btn-save" style="width: 120px;">บันทึก</button>
+                        </div>
+                    </div>
+                </div>      
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- แถวสอง: ยกที่ 4, 5, สรุปคะแนน -->
-            <div class="row">
-                <!-- ยกที่ 4 -->
-                <div class="col-md-4">
-                    <div class="round-card">
-                        <div class="edit-icon">✎</div>
-                        <h3 class="round">ยกที่ 4</h3>
-                        <div class="red-side">
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
-                        </div>
-                        <div class="blue-side">
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
-                        </div>
-                        <div class="clearfix"></div>
-                        <button class="btn-save">บันทึก</button>
-                    </div>
-                </div>
-
-                <!-- ยกที่ 5 -->
-                <div class="col-md-4">
-                    <div class="round-card">
-                        <div class="edit-icon">✎</div>
-                        <h3 class="round">ยกที่ 5</h3>
-                        <div class="red-side">
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
-                        </div>
-                        <div class="blue-side">
-                            <label class="judge-label">JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
-                        </div>
-                        <div class="clearfix"></div>
-                        <button class="btn-save">บันทึก</button>
-                    </div>
-                </div>
-
-                <!-- สรุปคะแนน -->
-                <div class="col-md-4">
-                    <div class="summary-card">
-                        <div class="edit-icon">✎</div>
-                        <h3 class="round">สรุปคะแนน</h3>
-                        <div class="summary-red">
-                            <label class="judge-label">SUM JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">SUM JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">SUM JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
-                        </div>
-                        <div class="summary-blue">
-                            <h3>&nbsp;</h3>
-                            <label class="judge-label">SUM JUDGE 1</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">SUM JUDGE 2</label>
-                            <input type="number" class="form-control mb-2">
-                            <label class="judge-label">SUM JUDGE 3</label>
-                            <input type="number" class="form-control mb-2">
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-                </div>
-            </div>
-
         </div>
+        <div id="footer"></div>
     </div>
 
+   
+    <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="../../assets/js/adminlte.min.js"></script>
+    <script src="../../assets/js/index.js"></script>
 
+    
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../plugins/bootstrap-5/js/bootstrap.bundle.min.js"></script>
-    <script src="https://kit.fontawesome.com/86e67b6ecc.js" crossorigin="anonymous"></script>
-
 
     <script>
-        const saveButtons = document.querySelectorAll('.btn-save');
-        const successAlert = document.getElementById('successAlert');
+        
+        fetch('../includes/sidebar.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('sidebar').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading sidebar:', error);
+            });
 
-        saveButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                successAlert.style.display = 'block';
-                setTimeout(() => {
-                    successAlert.style.display = 'none';
-                }, 3000);
+        fetch('../includes/footer.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const saveButtons = document.querySelectorAll('.btn-save');
+            const successAlert = document.getElementById('successAlert');
+
+            saveButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    console.log('Button clicked!');
+                    successAlert.style.display = 'block';
+                    setTimeout(() => {
+                        successAlert.style.display = 'none';
+                    }, 2500);
+                });
             });
         });
     </script>
+
 </body>
 
 </html>
