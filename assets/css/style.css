@@ -1,54 +1,127 @@
-/* เพิ่มภาพพื้นหลัง */
-body {
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    background-image: url('../images/221.jpg'); 
-    background-size: cover; 
-    background-position: center center; 
-    background-repeat: no-repeat; 
+body,
+html {
+  height: 100%;
+  font-family: "Kanit", cursive !important;
+  font-size: 0.95rem !important;
 }
 
-/* สไตล์สำหรับ login-container */
-.login-container {
-    background-color: rgba(255, 255, 255, 0.8); /* ให้พื้นหลังของ container เป็นโปร่งใส */
-    border-radius: 10px;
-    padding: 30px;
-    max-width: 400px;
-    margin: 100px auto;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+.bg {
+  background: #56baed;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+  clip-path: polygon(0 0, 55% 0, 45% 100%, 0% 100%);
 }
 
-h2 {
-    font-family: Arial, sans-serif;
-    color: #333;
+.w-60p {
+  width: 60px !important;
+}
+.w-90p {
+  width: 90px !important;
+}
+.w-150p {
+  width: 150px !important;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+.canvas {
+  height: 300px !important;
 }
 
-input[type="text"],
-input[type="password"] {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.toggle.ios,
+.toggle-on.ios,
+.toggle-off.ios {
+  border-radius: 20px;
+  font-weight: 100px;
 }
 
-button {
-    padding: 10px;
-    font-size: 16px;
-    color: white;
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.toggle.ios .toggle-handle {
+  border-radius: 20px;
 }
 
-button:hover {
-    background-color: #45a049;
+.toggle-on.btn {
+  padding-right: 19px;
+  font-weight: 100 !important;
 }
+
+.btn {
+  font-size: inherit !important;
+}
+
+.card,
+.small-box,
+.small-box-footer {
+  border-radius: 15px !important;
+}
+
+.small-box h1 {
+  font-size: 2rem !important;
+}
+
+.rtl {
+  direction: rtl !important;
+}
+
+@media (max-width: 1400px) {
+  .table-responsive {
+    overflow-x: auto;
+    scrollbar-width: thin; /* สำหรับ Firefox */
+  }
+
+  .table-responsive-xxl {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    scrollbar-width: thin; /* สำหรับ Firefox */
+  }
+
+  .table-responsive-xxl > .table-bordered {
+    border: 0;
+  }
+
+  #orders .detail {
+    width: 300px !important;
+  }
+}
+
+@media (max-width: 1200px) {
+  .small-box h1 {
+    font-size: 1.7rem !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .small-box h1 {
+    font-size: 1.4rem !important;
+  }
+}
+
+/* สำหรับการกำหนดแถบเลื่อนใน WebKit (เช่น Chrome, Safari) */
+.table-responsive::-webkit-scrollbar,
+.table-responsive-xxl::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb,
+.table-responsive-xxl::-webkit-scrollbar-thumb {
+  background-color: #888;
+}
+
+.table-responsive::-webkit-scrollbar-track,
+.table-responsive-xxl::-webkit-scrollbar-track {
+  background-color: #e0e0e0;
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.table-responsive .ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px; /* กำหนดขนาดสูงสุดของข้อความ */
+}
+

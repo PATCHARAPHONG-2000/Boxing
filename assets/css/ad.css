@@ -1,0 +1,34 @@
+.wrapper .formpdf{
+    margin-top: 100px;
+    margin-left: 100px;
+    background-color: white;
+    width: 101.6mm;
+    height: 152.4mm;
+    
+}
+
+.wrapper .formpdf .container{
+    padding: 10px;
+}
+.wrapper .formpdf .nameevent{
+    
+    font-size: 25px;
+
+}
+.wrapper .formpdf .name{
+    margin-top: 15px;
+    font-size: 20px;
+
+}
+.wrapper .formpdf .status{
+    min-height: 2px;
+    font-size: 20px;
+
+}
+
+.wrapper .formpdf img{
+height: 200px;
+width: max-content;
+
+}
+

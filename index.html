@@ -5,29 +5,135 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>หน้า Login</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="../../assets/css/adminlte.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Kanit', sans-serif;
+            background-image: url('./assets/images/login.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            margin: 0;
+        }
+
+
+        /* ปรับ login-card-body */
+        .login-card-body {
+            height: 450px;
+            width: 500px;
+            padding: 4rem 3rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+        }
+
+        /* ปรับหัวข้อ */
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            text-align: center;
+            background-image: url('./assets/images/h1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="login-container">
-        <h2>เข้าสู่ระบบ</h2>
-        <form id="loginForm">
-            <label for="username">username:</label>
-            <input type="text" id="username" name="username" required><br><br>
 
-            <label for="password">password:</label>
-            <input type="password" id="password" name="password" required><br><br>
-            <a href="./pages/dashboard/index.html" class="btn btn-primary"></a>
-            <!-- <button type="submit">เข้าสู่ระบบ</button> -->
-        </form>
-        <p id="error-message" style="color:red; display:none;">ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</p>
+    <div class="login-box">
+        <div class="card shadow">
+            <div class="card-body login-card-body">
+                <h1 class="text-center mb-4">BOXING LOGIN</h1>
+                <form id="loginForm" action="POST">
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="username">ชื่อผู้ใช้</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            placeholder="กรอกชื่อผู้ใช้ของคุณ" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label class="form-label" for="password">รหัสผ่าน</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="กรอกรหัสผ่านของคุณ" required>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary">เข้าสู่ระบบ</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        crossorigin="anonymous"></script>
-    <script src="login.js"></script>
+    <!-- scripts -->
+    <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="../../assets/js/adminlte.min.js"></script>
+    <script src="../../assets/js/index.js"></script>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // ป้องกันการรีเฟรชหน้าเว็บ
+
+            // ดึงค่าจากฟอร์ม
+            const users = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // ตรวจสอบว่าฟิลด์ไม่ว่างเปล่า
+            if (!users || !password) {
+                alert('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+                return;
+            }
+
+            // ส่งคำขอไปยัง PHP
+            fetch("http://192.168.1.33/BOXING/service/login/login.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                    User: users,
+                    password: password
+                }).toString()
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status) {
+                        // หากล็อกอินสำเร็จ
+                        alert(result.message || "เข้าสู่ระบบสำเร็จ");
+                        window.location.href = "./pages/dashboard/";
+                    } else {
+                        // หากล็อกอินไม่สำเร็จ
+                        alert(result.error || "เกิดข้อผิดพลาด");
+                    }
+                })
+                .catch(error => {
+                    console.error("เกิดข้อผิดพลาดในการเชื่อมต่อ:", error);
+                    alert("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
+                });
+        });
+
+    </script>
 </body>
 
 </html>

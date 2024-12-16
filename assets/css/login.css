@@ -1,0 +1,159 @@
+#login,
+#register #province {
+  overflow-y: auto;
+  scrollbar-width: none;
+  overflow: auto;
+}
+
+.register {
+  overflow-y: auto;
+}
+
+#login::-webkit-scrollbar,
+#province::-webkit-scrollbar,
+#register::-webkit-scrollbar {
+  width: 0px;
+}
+
+#login .card {
+  margin-top: 120px;
+  background-color: #fff;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  padding: 20px;
+}
+
+#login h2 {
+  color: #333;
+}
+
+#login .form-outline {
+  margin-bottom: 30px;
+}
+
+#login p.small {
+  text-align: left;
+}
+
+#login form .btn {
+  background-color: #bec0be;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 10px 15px;
+  cursor: pointer;
+  margin: 0 auto;
+  text-align: center;
+}
+
+#login .btn:hover {
+  background-color: red;
+}
+
+#register .card {
+  max-height: -200px;
+  background-color: #fff;
+  box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.2);
+  border-radius: 1rem;
+  padding: 20px;
+}
+
+#register h3 {
+  text-align: center;
+}
+
+#register span {
+  text-align: left;
+}
+
+#register .btn {
+  background-color: #bec0be;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 10px 15px;
+  cursor: pointer;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+#register .btn:hover {
+  background-color: red;
+}
+
+* {
+  font-family: "Raleway";
+}
+
+@keyframes showNotification {
+  to {
+    opacity: 1;
+    left: 0px;
+  }
+}
+
+#notification-area .notification.success {
+  background: #389838;
+}
+
+#notification-area .notification.error {
+  background: rgb(255, 0, 0);
+}
+
+#notification-area .notification.info {
+  background: #00acee;
+}
+
+*/ .gender {
+  margin-top: 20px;
+}
+
+.pin form .input-field {
+  flex-direction: row;
+  column-gap: 10px;
+}
+
+.pin .input-field input {
+  height: 45px;
+  width: 42px;
+  border-radius: 6px;
+  outline: none;
+  font-size: 1.125rem;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.pin .input-field input:focus {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+}
+
+.pin .input-field input::-webkit-inner-spin-button,
+.pin .input-field input::-webkit-outer-spin-button {
+  display: none;
+}
+
+.custom-dropdown {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+}
+
+.dropdown-container {
+  margin-bottom: 16px;
+}
+
+.larger-swal {
+  border-radius: 10px;
+  width: 25%;
+
+  height: 75%;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* เพิ่มขอบล่างเพื่อเว้นระยะห่าง */
+}
+.checkbox {
+  margin-right: 5px;
+}
