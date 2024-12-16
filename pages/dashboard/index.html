@@ -196,41 +196,9 @@
                     console.error('Error loading footer:', error);
                 });
 
-            // ดึงข้อมูล JSON จาก PHP
-            fetch("http://192.168.1.33/BOXING/service/get_data/get_data_spps.php")
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json(); // แปลงข้อมูล Response เป็น JSON
-                })
-                .then((data) => {
-                    console.log(data); // ตรวจสอบข้อมูลใน Console
-                    const container = document.getElementById("matchTableBody");
 
-                    // ลบข้อมูลเก่าในตาราง (ถ้ามี)
-                    container.innerHTML = "";
+                
 
-                    // แสดงข้อมูลในตาราง
-                    data.forEach((item) => {
-                        const row = document.createElement("tr"); // สร้างแถวใหม่
-                        row.innerHTML = `
-                    <td>${item.id}</td>
-                    <td>${item.name_red}</td>
-                    <td>${item.name_blue}</td>
-                    <td><img src="${item.Image_Red}" alt="Image_Red" width="100" height="100"></td>
-                    <td><img src="${item.Image_Blue}" alt="Image_Blue" width="100" height="100"></td>
-                    <td>
-                        <button type="button" class="btn btn-danger btn-sm" data-id="${item.id}">ลบ</button>
-                        <button type="button" class="btn btn-info btn-sm" data-id="${item.id}">แก้ไข</button>
-                    </td>
-                `;
-                        container.appendChild(row); // เพิ่มแถวลงในตาราง
-                    });
-                })
-                .catch((error) => {
-                    console.error("Error fetching data:", error);
-                });
         </script>
 
 </body>
