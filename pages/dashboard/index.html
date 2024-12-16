@@ -87,10 +87,8 @@
                                                         <label for="Image_Red"
                                                             class="form-label">เลือกรูปมุมสีแดง</label>
                                                         <div class="custom-file">
-                                                            <label class="custom-file-label" for="inputGroupFile01"
-                                                                id="Image_Red">เลือกไฟล์</label>
-                                                            <input type="file" class="custom-file-input"
-                                                                id="inputGroupFile01">
+                                                            <input type="file" class="custom-file-input" id="inputGroupFile01">
+                                                            <label class="custom-file-label" for="inputGroupFile01">เลือกไฟล์</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -108,10 +106,8 @@
                                                         <label for="Image_Blue"
                                                             class="form-label">เลือกรูปมุมสีน้ำเงิน</label>
                                                         <div class="custom-file">
-                                                            <label class="custom-file-label" for="inputGroupFile01"
-                                                                id="Image_Blue">เลือกไฟล์</label>
-                                                            <input name="Image_Blue" type="file"
-                                                                class="custom-file-input" id="inputGroupFile01">
+                                                            <input type="file" class="custom-file-input" id="inputGroupFile01">
+                                                            <label class="custom-file-label" for="inputGroupFile01">เลือกไฟล์</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -135,7 +131,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody id="matchTableBody">
-                                                <!-- ตารางจะแสดงข้อมูลที่เพิ่มเข้ามา -->
+                                                <!-- ตารางจะแสดงข้อมูลที่เพิ่มเข้ามา    -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -201,6 +197,18 @@
 
         </script>
 
+        <script>
+            // อัปเดตชื่อไฟล์เมื่อเลือกไฟล์
+            document.querySelectorAll('.custom-file-input').forEach(input => {
+                input.addEventListener('change', function () {
+                    const fileName = this.files[0]?.name || "เลือกไฟล์";
+                    const label = this.nextElementSibling; // หา label ที่อยู่ถัดจาก input
+                    if (label && label.classList.contains('custom-file-label')) {
+                        label.textContent = fileName;
+                    }
+                });
+            });
+        </script>
 </body>
 
 </html>
