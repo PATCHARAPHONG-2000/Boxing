@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="../../assets/css/adminlte.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- Datatables -->
+    <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+
+</head>
+
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <div id="sidebar"></div>
+        <div class="content-wrapper pt-3">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow">
+                                <div class="card-header shadow">
+                                    <h2 class="mb-3">
+                                       <!-- ใส่หัวข้อ -->
+                                    </h2>
+                                    <div class="mb-3 d-flex align-items-center">
+                                       <!-- ใส่รายละเอียด -->
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <!-- ใส่ส่วนเนื้อหา -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer"></div>
+    </div>
+
+    <!-- scripts -->
+    <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="../../assets/js/adminlte.min.js"></script>
+    <script src="../../assets/js/index.js"></script>
+
+    <!-- datatables -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+    <script>
+        // โหลด Sidebar
+        fetch('../includes/sidebar.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('sidebar').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading sidebar:', error);
+            });
+
+        // โหลด Footer
+        fetch('../includes/footer.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
+    </script>
+
+</body>
+
+</html>
