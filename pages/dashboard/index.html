@@ -15,10 +15,18 @@
     <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 
+    <style>
+        .form-label {
+            font-size: 16px;
+            font-family: 'Kanit', sans-serif;
+            font-weight: bold;
+        }
+    </style>
+
 </head>
 
 <body class="hold-transition sidebar-mini">
-    <div class="wrapper">
+    <class="wrapper">
         <div id="sidebar"></div>
         <div class="content-wrapper pt-3">
             <div class="content">
@@ -28,70 +36,202 @@
                             <div class="card shadow">
                                 <div class="card-header shadow">
                                     <h2 class="mb-3">
-                                       <!-- ใส่หัวข้อ -->
+                                        <i class="fa-solid fa-user-tie"></i>
+                                        กรอกข้อมูลนักกีฬา
                                     </h2>
                                     <div class="mb-3 d-flex align-items-center">
-                                       <!-- ใส่รายละเอียด -->
+                                        <div class="dropdown mr-2">
+                                            <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMatchType" data-toggle="dropdown" aria-expanded="false">
+                                                เลือกประเภทมวย
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMatchType">
+                                                <a class="dropdown-item" href="#" onclick="selectMatchType('มวยสมัครเล่น')">มวยสมัครเล่น</a>
+                                                <a class="dropdown-item" href="#" onclick="selectMatchType('มวยอาชีพ')">มวยอาชีพ</a>
+                                            </div>
+                                            <input type="hidden" id="Match_Type" name="Match_Type" required>
+                                        </div>
+                                        <button class="btn btn-warning btn-sm" id="clearDataButton" onclick="clearAllData()">ลบข้อมูลทั้งหมด</button>
+                                </div>
+
+                                <div class="p-2" id="form_demonstration_boxing">
+                                    <div class="card-body">
+
+                                        <form class="needs-validation mt-3">
+                                            <!-- Match Name -->
+                                            <div class="mb-3">
+                                                <label for="Match_Name" class="form-label">ชื่อแมตช์
+                                                    <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="Match_Name"
+                                                        name="Match_Name" placeholder="กรอกชื่อแมตช์"
+                                                        aria-label="Match Name" required>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-success" id="lockMatchNameButton" onclick="saveMatchName()">บันทึก</button>
+                                                        <button type="button" class="btn btn-warning " id="editMatchNameButton" onclick="toggleEdit()">แก้ไข</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                                        <form class="needs-validation">
+                                            <div class="row">
+                                                <!-- Red -->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="Person_Red" class="form-label">ชื่อมุมสีแดง
+                                                            <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" id="Person_Red"
+                                                            name="Person_Red" placeholder="กรอกชื่อฝ่ายแดง" required />
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="Image_Red"
+                                                            class="form-label">เลือกรูปมุมสีแดง</label>
+                                                        <div class="custom-file">
+                                                            <label class="custom-file-label" for="inputGroupFile01"
+                                                                id="Image_Red">เลือกไฟล์</label>
+                                                            <input type="file" class="custom-file-input"
+                                                                id="inputGroupFile01">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Blue -->
+                                                <div class="col-lg-6">
+                                                    <div class="mb-3">
+                                                        <label for="Person_Blue" class="form-label">ชื่อมุมสีน้ำเงิน
+                                                            <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control" id="Person_Blue"
+                                                            name="Person_Blue" placeholder="กรอกชื่อฝ่ายน้ำเงิน"
+                                                            required />
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="Image_Blue"
+                                                            class="form-label">เลือกรูปมุมสีน้ำเงิน</label>
+                                                        <div class="custom-file">
+                                                            <label class="custom-file-label" for="inputGroupFile01"
+                                                                id="Image_Blue">เลือกไฟล์</label>
+                                                            <input name="Image_Blue" type="file"
+                                                                class="custom-file-input" id="inputGroupFile01">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="text-center">
+                                            <button type="button" class="btn btn-primary text-center"  id="saveDataButton">บันทึกข้อมูล</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                    <div class="card-body table-responsive mt-4">
+                                        <table id="matchDataTable" class="table table-striped table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th class="align-middle text-white bg-danger">ลำดับที่</th>
+                                                    <th class="align-middle text-white bg-danger">ชื่อฝ่ายสีแดง</th>
+                                                    <th class="align-middle text-white bg-danger">ชื่อฝ่ายสีน้ำเงิน</th>
+                                                    <th class="align-middle text-white bg-danger">รูปสีแดง</th>
+                                                    <th class="align-middle text-white bg-danger">รูปสีน้ำเงิน</th>
+                                                    <th class="align-middle text-white bg-danger">ลบ/แก้ไข</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="matchTableBody">
+                                                <!-- ตารางจะแสดงข้อมูลที่เพิ่มเข้ามา -->
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
 
-                                <div class="card-body">
-                                    <!-- ใส่ส่วนเนื้อหา -->
-                                </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div id="footer"></div>
-    </div>
+        </div>
 
-    <!-- scripts -->
-    <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
-    <script src="../../plugins/jquery/jquery.min.js"></script>
-    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
-    <script src="../../assets/js/adminlte.min.js"></script>
-    <script src="../../assets/js/index.js"></script>
+        <!-- scripts -->
+        <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
+        <script src="../../plugins/jquery/jquery.min.js"></script>
+        <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+        <script src="../../assets/js/adminlte.min.js"></script>
+        <script src="../../assets/js/index.js"></script>
 
-    <!-- datatables -->
-    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+        <!-- datatables -->
+        <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+        <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 
-    <script>
-        // โหลด Sidebar
-        fetch('../includes/sidebar.html')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('sidebar').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading sidebar:', error);
-            });
+        <script>
+            // โหลด Sidebar
+            fetch('../includes/sidebar.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('sidebar').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error loading sidebar:', error);
+                });
 
-        // โหลด Footer
-        fetch('../includes/footer.html')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById('footer').innerHTML = data;
-            })
-            .catch(error => {
-                console.error('Error loading footer:', error);
-            });
-    </script>
+            // โหลด Footer
+            fetch('../includes/footer.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    document.getElementById('footer').innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('Error loading footer:', error);
+                });
+
+            // ดึงข้อมูล JSON จาก PHP
+            fetch("http://192.168.1.33/BOXING/service/get_data/get_data_spps.php")
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json(); // แปลงข้อมูล Response เป็น JSON
+                })
+                .then((data) => {
+                    console.log(data); // ตรวจสอบข้อมูลใน Console
+                    const container = document.getElementById("matchTableBody");
+
+                    // ลบข้อมูลเก่าในตาราง (ถ้ามี)
+                    container.innerHTML = "";
+
+                    // แสดงข้อมูลในตาราง
+                    data.forEach((item) => {
+                        const row = document.createElement("tr"); // สร้างแถวใหม่
+                        row.innerHTML = `
+                    <td>${item.id}</td>
+                    <td>${item.name_red}</td>
+                    <td>${item.name_blue}</td>
+                    <td><img src="${item.Image_Red}" alt="Image_Red" width="100" height="100"></td>
+                    <td><img src="${item.Image_Blue}" alt="Image_Blue" width="100" height="100"></td>
+                    <td>
+                        <button type="button" class="btn btn-danger btn-sm" data-id="${item.id}">ลบ</button>
+                        <button type="button" class="btn btn-info btn-sm" data-id="${item.id}">แก้ไข</button>
+                    </td>
+                `;
+                        container.appendChild(row); // เพิ่มแถวลงในตาราง
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                });
+        </script>
 
 </body>
 
