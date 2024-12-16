@@ -41,114 +41,125 @@
                                     </h2>
                                     <div class="mb-3 d-flex align-items-center">
                                         <div class="dropdown mr-2">
-                                            <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMatchType" data-toggle="dropdown" aria-expanded="false">
+                                            <button class="btn btn-success btn-sm dropdown-toggle" type="button"
+                                                id="dropdownMatchType" data-toggle="dropdown" aria-expanded="false">
                                                 เลือกประเภทมวย
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMatchType">
-                                                <a class="dropdown-item" href="#" onclick="selectMatchType('มวยสมัครเล่น')">มวยสมัครเล่น</a>
-                                                <a class="dropdown-item" href="#" onclick="selectMatchType('มวยอาชีพ')">มวยอาชีพ</a>
+                                                <a class="dropdown-item" href="#"
+                                                    onclick="selectMatchType('มวยสมัครเล่น')">มวยสมัครเล่น</a>
+                                                <a class="dropdown-item" href="#"
+                                                    onclick="selectMatchType('มวยอาชีพ')">มวยอาชีพ</a>
                                             </div>
                                             <input type="hidden" id="Match_Type" name="Match_Type" required>
                                         </div>
-                                        <button class="btn btn-warning btn-sm" id="clearDataButton" onclick="clearAllData()">ลบข้อมูลทั้งหมด</button>
-                                </div>
+                                        <button class="btn btn-warning btn-sm" id="clearDataButton"
+                                            onclick="clearAllData()">ลบข้อมูลทั้งหมด</button>
+                                    </div>
 
-                                <div class="p-2" id="form_demonstration_boxing">
-                                    <div class="card-body">
+                                    <div class="p-2" id="form_demonstration_boxing">
+                                        <div class="card-body">
 
-                                        <form class="needs-validation mt-3">
-                                            <!-- Match Name -->
-                                            <div class="mb-3">
-                                                <label for="Match_Name" class="form-label">ชื่อแมตช์
-                                                    <span class="text-danger">*</span></label>
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="Match_Name"
-                                                        name="Match_Name" placeholder="กรอกชื่อแมตช์"
-                                                        aria-label="Match Name" required>
-                                                    <div class="input-group-append">
-                                                        <button type="button" class="btn btn-success" id="lockMatchNameButton" onclick="saveMatchName()">บันทึก</button>
-                                                        <button type="button" class="btn btn-warning " id="editMatchNameButton" onclick="toggleEdit()">แก้ไข</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-
-                                        <form class="needs-validation">
-                                            <div class="row">
-                                                <!-- Red -->
-                                                <div class="col-lg-6">
-                                                    <div class="mb-3">
-                                                        <label for="Person_Red" class="form-label">ชื่อมุมสีแดง
-                                                            <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" id="Person_Red"
-                                                            name="Person_Red" placeholder="กรอกชื่อฝ่ายแดง" required />
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="Image_Red"
-                                                            class="form-label">เลือกรูปมุมสีแดง</label>
-                                                        <div class="custom-file">
-                                                            <label class="custom-file-label" for="inputGroupFile01"
-                                                                id="Image_Red">เลือกไฟล์</label>
-                                                            <input type="file" class="custom-file-input"
-                                                                id="inputGroupFile01">
+                                            <form class="needs-validation mt-3">
+                                                <!-- Match Name -->
+                                                <div class="mb-3">
+                                                    <label for="Match_Name" class="form-label">ชื่อแมตช์
+                                                        <span class="text-danger">*</span></label>
+                                                    <div class="input-group">
+                                                        <input type="text" class="form-control" id="Match_Name"
+                                                            name="Match_Name" placeholder="กรอกชื่อแมตช์"
+                                                            aria-label="Match Name" required>
+                                                        <div class="input-group-append">
+                                                            <button type="button" class="btn btn-success"
+                                                                id="lockMatchNameButton"
+                                                                onclick="saveMatchName()">บันทึก</button>
+                                                            <button type="button" class="btn btn-warning "
+                                                                id="editMatchNameButton"
+                                                                onclick="toggleEdit()">แก้ไข</button>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </form>
 
-                                                <!-- Blue -->
-                                                <div class="col-lg-6">
-                                                    <div class="mb-3">
-                                                        <label for="Person_Blue" class="form-label">ชื่อมุมสีน้ำเงิน
-                                                            <span class="text-danger">*</span></label>
-                                                        <input type="text" class="form-control" id="Person_Blue"
-                                                            name="Person_Blue" placeholder="กรอกชื่อฝ่ายน้ำเงิน"
-                                                            required />
+                                            <form class="needs-validation">
+                                                <div class="row">
+                                                    <!-- Red -->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="Person_Red" class="form-label">ชื่อมุมสีแดง
+                                                                <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="Person_Red"
+                                                                name="Person_Red" placeholder="กรอกชื่อฝ่ายแดง"
+                                                                required />
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Image_Red"
+                                                                class="form-label">เลือกรูปมุมสีแดง</label>
+                                                            <div class="custom-file">
+                                                                <label class="custom-file-label" for="inputGroupFile01"
+                                                                    id="Image_Red">เลือกไฟล์</label>
+                                                                <input type="file" class="custom-file-input"
+                                                                    id="inputGroupFile01">
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div class="mb-3">
-                                                        <label for="Image_Blue"
-                                                            class="form-label">เลือกรูปมุมสีน้ำเงิน</label>
-                                                        <div class="custom-file">
-                                                            <label class="custom-file-label" for="inputGroupFile01"
-                                                                id="Image_Blue">เลือกไฟล์</label>
-                                                            <input name="Image_Blue" type="file"
-                                                                class="custom-file-input" id="inputGroupFile01">
+
+                                                    <!-- Blue -->
+                                                    <div class="col-lg-6">
+                                                        <div class="mb-3">
+                                                            <label for="Person_Blue" class="form-label">ชื่อมุมสีน้ำเงิน
+                                                                <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control" id="Person_Blue"
+                                                                name="Person_Blue" placeholder="กรอกชื่อฝ่ายน้ำเงิน"
+                                                                required />
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="Image_Blue"
+                                                                class="form-label">เลือกรูปมุมสีน้ำเงิน</label>
+                                                            <div class="custom-file">
+                                                                <label class="custom-file-label" for="inputGroupFile01"
+                                                                    id="Image_Blue">เลือกไฟล์</label>
+                                                                <input name="Image_Blue" type="file"
+                                                                    class="custom-file-input" id="inputGroupFile01">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="text-center">
-                                            <button type="button" class="btn btn-primary text-center"  id="saveDataButton">บันทึกข้อมูล</button>
-                                            </div>
-                                        </form>
+                                                <div class="text-center">
+                                                    <button type="button" class="btn btn-primary text-center"
+                                                        id="saveDataButton">บันทึกข้อมูล</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+                                        <div class="card-body table-responsive mt-4">
+                                            <table id="matchDataTable" class="table table-striped table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="align-middle text-white bg-danger">ลำดับที่</th>
+                                                        <th class="align-middle text-white bg-danger">ชื่อฝ่ายสีแดง</th>
+                                                        <th class="align-middle text-white bg-danger">ชื่อฝ่ายสีน้ำเงิน
+                                                        </th>
+                                                        <th class="align-middle text-white bg-danger">รูปสีแดง</th>
+                                                        <th class="align-middle text-white bg-danger">รูปสีน้ำเงิน</th>
+                                                        <th class="align-middle text-white bg-danger">ลบ/แก้ไข</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="matchTableBody">
+                                                    <!-- ตารางจะแสดงข้อมูลที่เพิ่มเข้ามา -->
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
 
-                                    <div class="card-body table-responsive mt-4">
-                                        <table id="matchDataTable" class="table table-striped table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th class="align-middle text-white bg-danger">ลำดับที่</th>
-                                                    <th class="align-middle text-white bg-danger">ชื่อฝ่ายสีแดง</th>
-                                                    <th class="align-middle text-white bg-danger">ชื่อฝ่ายสีน้ำเงิน</th>
-                                                    <th class="align-middle text-white bg-danger">รูปสีแดง</th>
-                                                    <th class="align-middle text-white bg-danger">รูปสีน้ำเงิน</th>
-                                                    <th class="align-middle text-white bg-danger">ลบ/แก้ไข</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody id="matchTableBody">
-                                                <!-- ตารางจะแสดงข้อมูลที่เพิ่มเข้ามา -->
-                                            </tbody>
-                                        </table>
-                                    </div>
                                 </div>
 
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div id="footer"></div>
+            <div id="footer"></div>
         </div>
 
         <!-- scripts -->
@@ -196,11 +207,35 @@
                     console.error('Error loading footer:', error);
                 });
 
-
-                
-
         </script>
 
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                fetch('http://localhost:3000/api/sport_person')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        renderTable(data.data);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching data:', error);
+                        Swal.fire({
+                            title: 'ข้อผิดพลาด!',
+                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
+                            icon: 'error',
+                            confirmButtonText: 'ตกลง'
+                        });
+                    });
+            });
+
+            
+            
+        </script>
 </body>
 
 </html>
