@@ -10,7 +10,7 @@
     <!-- Font Awesome สำหรับ hamburger icon -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
 
-    
+
     <style>
         body {
             margin: 0;
@@ -116,8 +116,8 @@
         .round-card,
         .summary-card {
             border: 1px solid #ccc;
-            border-radius: 10px;
-            margin-bottom: 20px;
+            border-radius: 20px;
+            margin-bottom: 30px;
             position: relative;
         }
 
@@ -309,7 +309,8 @@
                         เลือกคู่มวย
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="showMatchesBtn">
-                        <li><a class="dropdown-item" href="#" id="match0" style="background-color: green; color: white;">เลือกคู่มวย</a></li>
+                        <li><a class="dropdown-item" href="#" id="match0"
+                                style="background-color: green; color: white;">เลือกคู่มวย</a></li>
                         <li><a class="dropdown-item" href="#" id="match1">1. A vs B</a></li>
                         <li><a class="dropdown-item" href="#" id="match2">2. C vs D</a></li>
                         <li><a class="dropdown-item" href="#" id="match3">3. F vs G</a></li>
@@ -320,26 +321,100 @@
 
 
 
-            </div>
+        </div>
 
-            <!-- Alert for Save Success -->
-            <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>บันทึกสำเร็จ</strong> บันทึกข้อมูลสำเร็จ
-                <button type="button" class="close"
-                    onclick="document.getElementById('successAlert').style.display='none';" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+        <!-- Alert for Save Success -->
+        <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>บันทึกสำเร็จ</strong> บันทึกข้อมูลสำเร็จ
+            <button type="button" class="close" onclick="document.getElementById('successAlert').style.display='none';"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
-            <div class="container-fluid">
-                <!-- แถวแรก: ยกที่ 1, 2, 3 -->
+        <div class="container-fluid">
+            <!-- แถวแรก: ยกที่ 1, 2, 3 -->
+            <div class="row">
+                <!-- ยกที่ 1 -->
+                <div class="col-md-4">
+                    <div class="round-card p-3"
+                        style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
+                        <!-- Remove the background color styling here -->
+                        <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 1</h1>
+                        <div class="row">
+                            <div class="red-side col-6">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
+                            </div>
+                            <div class="blue-side col-6">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="round-card p-3"
+                        style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
+                        <!-- Remove the background color styling here -->
+                        <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 2</h1>
+                        <div class="row">
+                            <div class="red-side col-6">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
+                            </div>
+                            <div class="blue-side col-6">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ยกที่ 3 -->
+                <div class="col-md-4">
+                    <div class="round-card p-3"
+                        style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
+                        <!-- Remove the background color styling here -->
+                        <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 3</h1>
+                        <div class="row">
+                            <div class="red-side col-6">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
+                            </div>
+                            <div class="blue-side col-6">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
+                                <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-3">
+                            <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- แถวสอง: ยกที่ 4, 5, สรุปคะแนน -->
                 <div class="row">
-                    <!-- ยกที่ 1 -->
+                    <!-- ยกที่ 4 -->
                     <div class="col-md-4">
                         <div class="round-card p-3"
                             style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
                             <!-- Remove the background color styling here -->
-                            <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 1</h1>
+                            <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 4
+                            </h1>
                             <div class="row">
                                 <div class="red-side col-6">
                                     <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
@@ -358,11 +433,13 @@
                         </div>
                     </div>
 
+                    <!-- ยกที่ 5 -->
                     <div class="col-md-4">
                         <div class="round-card p-3"
                             style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
                             <!-- Remove the background color styling here -->
-                            <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 2</h1>
+                            <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 5
+                            </h1>
                             <div class="row">
                                 <div class="red-side col-6">
                                     <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
@@ -381,22 +458,25 @@
                         </div>
                     </div>
 
-                    <!-- ยกที่ 3 -->
+                    <!-- สรุปคะแนน (Summary Score) -->
                     <div class="col-md-4">
                         <div class="round-card p-3"
                             style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
                             <!-- Remove the background color styling here -->
-                            <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 3</h1>
+                            <h1 class="round text-center text-white"
+                                style="background-color: transparent; font-size: 2.7rem;">สรุปคะแนน</h1>
                             <div class="row">
+                                <!-- Red Side -->
                                 <div class="red-side col-6">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
+                                    <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 1" value="0">
+                                    <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 2" value="0">
+                                    <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 3" value="0">
                                 </div>
+                                <!-- Blue Side -->
                                 <div class="blue-side col-6">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
+                                    <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 1" value="0">
+                                    <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 2" value="0">
+                                    <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 3" value="0">
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center mt-3">
@@ -405,102 +485,32 @@
                         </div>
                     </div>
 
-                    <!-- แถวสอง: ยกที่ 4, 5, สรุปคะแนน -->
-                    <div class="row">
-                        <!-- ยกที่ 4 -->
-                        <div class="col-md-4">
-                            <div class="round-card p-3"
-                                style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                <!-- Remove the background color styling here -->
-                                <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 4
-                                </h1>
-                                <div class="row">
-                                    <div class="red-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                    </div>
-                                    <div class="blue-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-center mt-3">
-                                    <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ยกที่ 5 -->
-                        <div class="col-md-4">
-                            <div class="round-card p-3"
-                                style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                <!-- Remove the background color styling here -->
-                                <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 5
-                                </h1>
-                                <div class="row">
-                                    <div class="red-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                    </div>
-                                    <div class="blue-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-center mt-3">
-                                    <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- สรุปคะแนน -->
-                        <div class="col-md-4">
-                            <div class="round-card p-3"
-                                style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                <!-- Remove the background color styling here -->
-                                <h1 class="round text-center text-white" style="background-color: transparent; font-size: 2.7rem;">สรุปคะแนน</h1>
-                                <div class="row">
-                                    <div class="red-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 1"
-                                            value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 2"
-                                            value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 3"
-                                            value="0">
-                                    </div>
-                                    <div class="blue-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 1"
-                                            value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 2"
-                                            value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 3"
-                                            value="0">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
 
 
+                   <script src="../../plugins/bootstrap-5/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.6/dist/sweetalert2.min.js"></script>
 
-                        <script src="../../plugins/bootstrap-5/js/bootstrap.bundle.min.js"></script>
-                        <script>
-                            const saveButtons = document.querySelectorAll('.btn-save');
-                            const successAlert = document.getElementById('successAlert');
-
-                            saveButtons.forEach(button => {
-                                button.addEventListener('click', () => {
-                                    successAlert.style.display = 'block';
-                                    setTimeout(() => {
-                                        successAlert.style.display = 'none';
-                                    }, 3000);
-                                });
-                            });
-                        </script>
+    <script>
+        // For saving and showing success alert with SweetAlert2
+        const saveButtons = document.querySelectorAll('.save-btn');
+        
+        saveButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                Swal.fire({
+                    title: 'บันทึกสำเร็จ',
+                    text: 'บันทึกข้อมูลสำเร็จ',
+                    icon: 'success',
+                    showClass: {
+                        popup: `animate__animated animate__fadeInUp animate__faster`
+                    },
+                    hideClass: {
+                        popup: `animate__animated animate__fadeOutDown animate__faster`
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
