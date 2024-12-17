@@ -2,505 +2,328 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้ายืนยันคะแนน</title>
-    <link rel="stylesheet" href="../../plugins/bootstrap-5/css/bootstrap.min.css">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome สำหรับ hamburger icon -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.1/css/all.css">
-
-    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Kanit">
+    <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="../../plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    <link rel="stylesheet" href="../../assets/css/adminlte.min.css">
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <!-- Datatables -->
+    <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
     <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            overflow-x: hidden;
-            overflow-y: scroll;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
+        /* ปรับพื้นหลังและระยะห่างให้ตรงกับยกที่ 1-5 */
+        /* ปรับพื้นหลังและระยะห่างให้ตรงกับยกที่ 1-5 */
+.round-card {
+    background: linear-gradient(to right, red 50%, blue 50%);
+    border-radius: 10px;
+    margin-bottom: 20px; /* ระยะห่างระหว่างรอบ */
+    padding: 15px; /* เพิ่มการ padding เพื่อให้พื้นที่ดูสมดุล */
+}
 
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
+.round {
+    background-color: transparent;
+}
 
-        ::-webkit-scrollbar-thumb {
-            background-color: transparent;
-        }
+.card-body {
+    padding-top: 0; /* ลบ padding บน */
+}
 
-        /* Top Navbar */
-        .top-nav {
-            display: flex;
-            align-items: center;
-            /* เดิมเป็น justify-content: space-between; ตอนนี้ให้จัดเรียงชิดซ้าย */
-            justify-content: start;
-            padding: 7.5px 15px;
-            border-bottom: 1px solid #dee2e6;
-            background: #fff;
-            gap: 120px;
-            /* เว้นระยะระหว่าง BOXING กับไอคอนเมนู */
-        }
+.col-md-4 {
+    margin-bottom: 20px; /* เพิ่มระยะห่างระหว่างคอลัมน์ */
+}
 
-        .top-nav .title {
-            font-size: 2.5rem;
-            font-weight: 100;
+/* เพิ่มการกำหนดความสูงของแต่ละรอบ */
+.round-card .round {
+    height: 100%;
+}
 
-        }
+/* ปรับขนาดของปุ่มให้เหมาะสม */
+.btn-save {
+    width: 120px;
+}
 
-        .top-nav .menu-icon {
-            font-size: 2.5rem;
-            cursor: pointer;
-
-        }
-
-        .sidebar {
-            height: calc(100vh - 50px);
-            width: 250px;
-            position: fixed;
-            top: 100px;
-            left: 0;
-            background-color: #fff;
-            border-right: 1px solid #dee2e6;
-            padding-top: 20px;
-        }
-
-        .sidebar a {
-            display: flex;
-            align-items: center;
-            color: #000;
-            padding: 10px 20px;
-            text-decoration: none;
-            font-size: 17px;
-            gap: 30px;
-        }
-
-        .sidebar a:hover {
-            background-color: #f8f9fa;
-        }
-
-        .sidebar a img {
-            width: 20px;
-            height: 20px;
-        }
-
-        .sidebar a:not(:last-child) {
-            margin-bottom: 3.5px;
-        }
-
-        .content {
-            margin-left: 260px;
-            padding: 15px;
-            margin-top: 10px;
-            background: #ffffff;
-        }
-
-        ฉ {
-            background: #dedede;
-            padding: 20px 20px;
-            margin-bottom: 20px;
-            font-size: 2rem;
-            font-weight: bold;
-            border-radius: 10px;
-        }
-
-        .page-title-container h1 {
-            background-color: #E4E4E4;
-            padding: 10px;
-            border-radius: 5px;
-            /* Optional: adds rounded corners */
-        }
-
-
-        .round-card,
-        .summary-card {
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-
-        .round-card h3,
-        .summary-card h3 {
-            font-size: 1.25rem;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-
-        .red-side,
-        .blue-side {
-            width: 50%;
-            float: left;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .red-side {
-            background: #ff0000;
-            color: #fff;
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-        }
-
-        .blue-side {
-            background: #0000ff;
-            color: #fff;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
-
-        .summary-red,
-        .summary-blue {
-            width: 50%;
-            float: left;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        .summary-red {
-            background: #ff0000;
-            color: #fff;
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-        }
-
-        .summary-blue {
-            background: #0000ff;
-            color: #fff;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            text-align: center
-        }
-
-        .judge-label {
-            font-size: 0.9rem;
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .edit-icon {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            cursor: pointer;
-            font-size: 1rem;
-            color: #000;
-            background: #fff;
-            border-radius: 50%;
-            width: 25px;
-            height: 25px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-save {
-            background: #FFA500;
-            color: #000;
-            border: none;
-            width: 100%;
-            margin-top: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            /* ลดขนาดตัวอักษร */
-            padding: 8px;
-            /* ลดขนาด padding */
-            align-self: center;
-            /* จัดตำแหน่งปุ่มให้อยู่ตรงกลาง */
-            max-width: 150px;
-            /* จำกัดความกว้างของปุ่ม */
-        }
-
-        .clearfix::after {
-            content: "";
-            display: block;
-            clear: both;
-        }
-
-        #successAlert {
-            display: none;
-            position: fixed;
-            top: 50px;
-            right: 30px;
-            z-index: 1000;
-        }
-
-        .round {
-            text-align: center;
-            justify-content: center;
-
-        }
-
-        /* New custom green button */
-        .btn-green {
-            background-color: #28a745;
-            /* Green background */
-            color: white;
-            /* White text */
-            border: none;
-            /* Remove border */
-        }
-
-        .btn-green:hover {
-            background-color: #218838;
-            /* Darker green on hover */
-        }
-
-        .match-buttons {
-            display: none;
-            margin-top: 15px;
-        }
     </style>
-
-
 </head>
 
-<body>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <div id="sidebar"></div>
+        <div class="content-wrapper pt-3">
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card shadow">
+                                <div class="card-header shadow">
+                                    <h2 class="mb-3">
+                                        กรอกคะแนน Manual
+                                    </h2>
+                                    <div class="mb-3 d-flex align-items-center">
+                                        <div class="dropdown">
+                                            <button class="btn btn-success dropdown-toggle" type="button"
+                                                id="showMatchesBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                                                เลือกคู่มวย
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="showMatchesBtn">
+                                                <li><a class="dropdown-item" href="#" id="match0"
+                                                        style="background-color: green; color: white;">เลือกคู่มวย</a>
+                                                </li>
+                                                <li><a class="dropdown-item" href="#" id="match1">1. A vs B</a></li>
+                                                <li><a class="dropdown-item" href="#" id="match2">2. C vs D</a></li>
+                                                <li><a class="dropdown-item" href="#" id="match3">3. F vs G</a></li>
+                                                <li><a class="dropdown-item" href="#" id="match4">4. H vs J</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
 
-    <!-- Top Navbar -->
-    <div class="top-nav">
-        <div class="title">BOXING</div>
-        <div class="menu-icon">
-            <i class="fas fa-bars"></i>
-        </div>
-    </div>
+                                <div class="card-body">
 
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <a href="#">
-            <img src="/icon/main1.png" alt="icon">
-            หน้าหลัก
-        </a>
-        <a href="#">
-            <img src="/icon/main2.png" alt="icon">
-            เพิ่มข้อมูลนักกีฬา
-        </a>
-        <a href="#">
-            <img src="/icon/main3.png" alt="icon">
-            หน้ายืนยันคะแนน
-        </a>
-        <a href="#">
-            <img src="/icon/main4.png" alt="icon">
-            กรอกคะแนน Manual
-        </a>
-        <a href="#">
-            <img src="/icon/main5.png" alt="icon">
-            เปิดหน้า Score
-        </a>
-    </div>
+                                    <div class="row">
+                                        <!-- ยกที่ 1 -->
+                                        <div class="col-md-4">
+                                            <div class="round-card p-3">
+                                                <h1 class="round text-center text-white">ยกที่ 1</h1>
+                                                <div class="row">
+                                                    <div class="red-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                    <div class="blue-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-center mt-3">
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
+                                                </div>
+                                            </div>
+                                        </div>
 
-    <div class="content">
-        <!-- Title Section -->
-        <div class="page-title-container 1">
-            <h1 class="text-left" style="background-color: #E4E4E4; padding: 10px; border-radius: 5px;">กรอกคะแนน Manual
-            </h1>
+                                        <!-- ยกที่ 2 -->
+                                        <div class="col-md-4">
+                                            <div class="round-card p-3">
+                                                <h1 class="round text-center text-white">ยกที่ 2</h1>
+                                                <div class="row">
+                                                    <div class="red-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                    <div class="blue-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-center mt-3">
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        <!-- ยกที่ 3 -->
+                                        <div class="col-md-4">
+                                            <div class="round-card p-3">
+                                                <h1 class="round text-center text-white">ยกที่ 3</h1>
+                                                <div class="row">
+                                                    <div class="red-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                    <div class="blue-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-center mt-3">
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-            <!-- Button to show match selection dropdown -->
+                                    <div class="row">
+                                        <!-- ยกที่ 4 -->
+                                        <div class="col-md-4">
+                                            <div class="round-card p-3">
+                                                <h1 class="round text-center text-white">ยกที่ 4</h1>
+                                                <div class="row">
+                                                    <div class="red-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                    <div class="blue-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-center mt-3">
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
+                                                </div>
+                                            </div>
+                                        </div>
 
-            <div class="mb-3 text-left">
-                <div class="dropdown">
-                    <button class="btn btn-success dropdown-toggle" type="button" id="showMatchesBtn"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        เลือกคู่มวย
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="showMatchesBtn">
-                        <li><a class="dropdown-item" href="#" id="match0" style="background-color: green; color: white;">เลือกคู่มวย</a></li>
-                        <li><a class="dropdown-item" href="#" id="match1">1. A vs B</a></li>
-                        <li><a class="dropdown-item" href="#" id="match2">2. C vs D</a></li>
-                        <li><a class="dropdown-item" href="#" id="match3">3. F vs G</a></li>
-                        <li><a class="dropdown-item" href="#" id="match4">4. H vs J</a></li>
-                    </ul>
+                                        <!-- ยกที่ 5 -->
+                                        <div class="col-md-4">
+                                            <div class="round-card p-3">
+                                                <h1 class="round text-center text-white">ยกที่ 5</h1>
+                                                <div class="row">
+                                                    <div class="red-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                    <div class="blue-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="JUDGE 3" value="0">
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-center mt-3">
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- สรุปคะแนน -->
+                                        <!-- สรุปคะแนน -->
+                                        <div class="col-md-4">
+                                            <div class="round-card p-3">
+                                                <h1 class="round text-center text-white" style="font-size: 2.7rem;">
+                                                    สรุปคะแนน</h1>
+                                                <div class="row">
+                                                    <div class="red-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="SUM JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="SUM JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="SUM JUDGE 3" value="0">
+                                                    </div>
+                                                    <div class="blue-side col-6">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="SUM JUDGE 1" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="SUM JUDGE 2" value="0">
+                                                        <input type="number" class="form-control mb-2"
+                                                            placeholder="SUM JUDGE 3" value="0">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <div id="footer"></div>
+    </div>
 
+    <!-- scripts -->
+    <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="../../assets/js/adminlte.min.js"></script>
+    <script src="../../assets/js/index.js"></script>
 
+    <script>
+        // Load Sidebar
+        fetch('../includes/sidebar.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('sidebar').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading sidebar:', error);
+            });
 
-            </div>
+        // Load Footer
+        fetch('../includes/footer.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
+    </script>
 
-            <!-- Alert for Save Success -->
-            <div id="successAlert" class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>บันทึกสำเร็จ</strong> บันทึกข้อมูลสำเร็จ
-                <button type="button" class="close"
-                    onclick="document.getElementById('successAlert').style.display='none';" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+    <script>
+        const saveButtons = document.querySelectorAll('.btn-save');
 
-            <div class="container-fluid">
-                <!-- แถวแรก: ยกที่ 1, 2, 3 -->
-                <div class="row">
-                    <!-- ยกที่ 1 -->
-                    <div class="col-md-4">
-                        <div class="round-card p-3"
-                            style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                            <!-- Remove the background color styling here -->
-                            <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 1</h1>
-                            <div class="row">
-                                <div class="red-side col-6">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                </div>
-                                <div class="blue-side col-6">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center mt-3">
-                                <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
-                            </div>
-                        </div>
-                    </div>
+        saveButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Show SweetAlert2 popup
+                Swal.fire({
+                    icon: 'success',
+                    title: 'บันทึกแล้ว',
+                    text: 'ข้อมูลถูกบันทึกสำเร็จ',
+                    confirmButtonText: 'ตกลง'
+                });
+            });
+        });
+    </script>
 
-                    <div class="col-md-4">
-                        <div class="round-card p-3"
-                            style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                            <!-- Remove the background color styling here -->
-                            <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 2</h1>
-                            <div class="row">
-                                <div class="red-side col-6">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                </div>
-                                <div class="blue-side col-6">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center mt-3">
-                                <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ยกที่ 3 -->
-                    <div class="col-md-4">
-                        <div class="round-card p-3"
-                            style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                            <!-- Remove the background color styling here -->
-                            <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 3</h1>
-                            <div class="row">
-                                <div class="red-side col-6">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                </div>
-                                <div class="blue-side col-6">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                    <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                </div>
-                            </div>
-                            <div class="d-flex justify-content-center mt-3">
-                                <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- แถวสอง: ยกที่ 4, 5, สรุปคะแนน -->
-                    <div class="row">
-                        <!-- ยกที่ 4 -->
-                        <div class="col-md-4">
-                            <div class="round-card p-3"
-                                style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                <!-- Remove the background color styling here -->
-                                <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 4
-                                </h1>
-                                <div class="row">
-                                    <div class="red-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                    </div>
-                                    <div class="blue-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-center mt-3">
-                                    <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- ยกที่ 5 -->
-                        <div class="col-md-4">
-                            <div class="round-card p-3"
-                                style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                <!-- Remove the background color styling here -->
-                                <h1 class="round text-center text-white" style="background-color: transparent;">ยกที่ 5
-                                </h1>
-                                <div class="row">
-                                    <div class="red-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                    </div>
-                                    <div class="blue-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 1" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 2" value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="JUDGE 3" value="0">
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-center mt-3">
-                                    <button class="btn btn-warning" style="width: 120px;">บันทึก</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- สรุปคะแนน -->
-                        <div class="col-md-4">
-                            <div class="round-card p-3"
-                                style="background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                <!-- Remove the background color styling here -->
-                                <h1 class="round text-center text-white" style="background-color: transparent; font-size: 2.7rem;">สรุปคะแนน</h1>
-                                <div class="row">
-                                    <div class="red-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 1"
-                                            value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 2"
-                                            value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 3"
-                                            value="0">
-                                    </div>
-                                    <div class="blue-side col-6">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 1"
-                                            value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 2"
-                                            value="0">
-                                        <input type="number" class="form-control mb-2" placeholder="SUM JUDGE 3"
-                                            value="0">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
-
-
-                        <script src="../../plugins/bootstrap-5/js/bootstrap.bundle.min.js"></script>
-                        <script>
-                            const saveButtons = document.querySelectorAll('.btn-save');
-                            const successAlert = document.getElementById('successAlert');
-
-                            saveButtons.forEach(button => {
-                                button.addEventListener('click', () => {
-                                    successAlert.style.display = 'block';
-                                    setTimeout(() => {
-                                        successAlert.style.display = 'none';
-                                    }, 3000);
-                                });
-                            });
-                        </script>
 </body>
 
 </html>
