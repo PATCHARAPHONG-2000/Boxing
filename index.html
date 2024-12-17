@@ -86,64 +86,84 @@
     <script src="../../assets/js/adminlte.min.js"></script>
 
     <script>
-        document.getElementById('loginForm').addEventListener('submit', function (e) {
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
             e.preventDefault();
 
             // ดึงค่าจากฟอร์ม
-            const users = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
 
-            if (!users || !password) {
-                alert('กรุณากรอกชื่อผู้ใช้และรหัสผ่าน');
+            if (!username || !password) {
+                Swal.fire({
+                    icon: "error",
+                    title: "ข้อมูลไม่ครบถ้วน",
+                    text: "กรุณากรอกชื่อผู้ใช้และรหัสผ่าน",
+                });
                 return;
             }
 
-            fetch("server/login.php", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
+            Swal.fire({
+                title: "กำลังเข้าสู่ระบบ...",
+                html: "กรุณารอสักครู่ <b></b> วินาที.",
+                timer: 2000,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const b = Swal.getHtmlContainer().querySelector("b");
+                    setInterval(() => {
+                        b.textContent = Swal.getTimerLeft();
+                    }, 100);
                 },
-                body: new URLSearchParams({
-                    User: users,
-                    password: password
-                }).toString()
-            })
-                .then(response => response.json())
-                .then(result => {
-                    if (result.status) {
+            }).then(() => {
+                window.location.href = "./pages/dashboard/";
+            });
 
-                        let timerInterval;
-                        Swal.fire({
-                            title: "กำลังเข้าสู่ระบบ...",
-                            html: "กรุณารอสักครู่ <b></b> วินาที.",
-                            timer: 2000,
-                            timerProgressBar: true,
-                            didOpen: () => {
-                                Swal.showLoading();
-                                const timer = Swal.getPopup().querySelector("b");
-                                timerInterval = setInterval(() => {
-                                    timer.textContent = `${Swal.getTimerLeft()}`;
-                                }, 100);
-                            },
-                            willClose: () => {
-                                // ย้ายไปยัง Dashboard หลังแสดง SweetAlert
-                                window.location.href = "./pages/dashboard/";
-                            }
-                        }).then((result) => {
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                console.log("I was closed by the timer");
-                            }
-                        });
-                    } else {
-
-                        alert(result.error || "เกิดข้อผิดพลาด");
-                    }
-                })
-                .catch(error => {
-                    console.error("เกิดข้อผิดพลาดในการเชื่อมต่อ:", error);
-                    alert("ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้");
-                });
+            // fetch("https://localhost:3000/Boxing/server/login.php", {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/x-www-form-urlencoded",
+            //     },
+            //     body: new URLSearchParams({
+            //         username, // ใช้ชื่อฟิลด์ที่ตรงกัน
+            //         password,
+            //     }).toString(),
+            // })
+            //     .then((response) => response.json())
+            //     .then((result) => {
+            //         if (result.status) {
+            //             Swal.fire({
+            //                 title: "กำลังเข้าสู่ระบบ...",
+            //                 html: "กรุณารอสักครู่ <b></b> วินาที.",
+            //                 timer: 2000,
+            //                 timerProgressBar: true,
+            //                 didOpen: () => {
+            //                     Swal.showLoading();
+            //                     const b = Swal.getHtmlContainer().querySelector("b");
+            //                     setInterval(() => {
+            //                         b.textContent = Swal.getTimerLeft();
+            //                     }, 100);
+            //                 },
+            //             }).then(() => {
+            //                 window.location.href = "./pages/dashboard/";
+            //             });
+            //         } else {
+            //             Swal.fire({
+            //                 icon: "error",
+            //                 title: "เข้าสู่ระบบล้มเหลว",
+            //                 text: result.error || "เกิดข้อผิดพลาด",
+            //             });
+            //         }
+            //     })
+            //     .catch((error) => {
+            //         console.error("เกิดข้อผิดพลาด:", error);
+            //         Swal.fire({
+            //             icon: "error",
+            //             title: "เกิดข้อผิดพลาด",
+            //             text: "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้",
+            //         });
+            //     });
         });
+
     </script>
 </body>
 

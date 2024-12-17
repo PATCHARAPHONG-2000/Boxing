@@ -26,7 +26,7 @@
 </head>
 
 <body class="hold-transition sidebar-mini">
-    <class="wrapper">
+    <div class="wrapper">
         <div id="sidebar"></div>
         <div class="content-wrapper pt-3">
             <div class="content">
@@ -96,10 +96,10 @@
                                                             <label for="Image_Red"
                                                                 class="form-label">เลือกรูปมุมสีแดง</label>
                                                             <div class="custom-file">
-                                                                <label class="custom-file-label" for="inputGroupFile01"
-                                                                    id="Image_Red">เลือกไฟล์</label>
                                                                 <input type="file" class="custom-file-input"
                                                                     id="inputGroupFile01">
+                                                                <label class="custom-file-label"
+                                                                    for="inputGroupFile01">เลือกไฟล์</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -117,10 +117,10 @@
                                                             <label for="Image_Blue"
                                                                 class="form-label">เลือกรูปมุมสีน้ำเงิน</label>
                                                             <div class="custom-file">
-                                                                <label class="custom-file-label" for="inputGroupFile01"
-                                                                    id="Image_Blue">เลือกไฟล์</label>
-                                                                <input name="Image_Blue" type="file"
-                                                                    class="custom-file-input" id="inputGroupFile01">
+                                                                <input type="file" class="custom-file-input"
+                                                                    id="inputGroupFile01">
+                                                                <label class="custom-file-label"
+                                                                    for="inputGroupFile01">เลือกไฟล์</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -146,7 +146,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody id="matchTableBody">
-                                                    <!-- ตารางจะแสดงข้อมูลที่เพิ่มเข้ามา -->
+                                                    <!-- ตารางจะแสดงข้อมูลที่เพิ่มเข้ามา    -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -159,83 +159,74 @@
                     </div>
                 </div>
             </div>
-            <div id="footer"></div>
         </div>
-
-        <!-- scripts -->
-        <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
-        <script src="../../plugins/jquery/jquery.min.js"></script>
-        <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
-        <script src="../../assets/js/adminlte.min.js"></script>
-        <script src="../../assets/js/index.js"></script>
-
-        <!-- datatables -->
-        <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-        <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-        <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-        <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-
-        <script>
-            // โหลด Sidebar
-            fetch('../includes/sidebar.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('sidebar').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error loading sidebar:', error);
-                });
-
-            // โหลด Footer
-            fetch('../includes/footer.html')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById('footer').innerHTML = data;
-                })
-                .catch(error => {
-                    console.error('Error loading footer:', error);
-                });
-
-        </script>
+        <div id="footer"></div>
+    </div>
 
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                fetch('http://localhost:3000/api/sport_person')
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(`HTTP error! Status: ${response.status}`);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        renderTable(data.data);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                        Swal.fire({
-                            title: 'ข้อผิดพลาด!',
-                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
-                            icon: 'error',
-                            confirmButtonText: 'ตกลง'
-                        });
-                    });
+
+    <!-- scripts -->
+    <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
+    <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
+    <script src="../../assets/js/adminlte.min.js"></script>
+    <script src="../../assets/js/index.js"></script>
+
+    <!-- datatables -->
+    <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+    <script>
+        // โหลด Sidebar
+        fetch('../includes/sidebar.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('sidebar').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading sidebar:', error);
             });
 
-            
-            
-        </script>
+        // โหลด Footer
+        fetch('../includes/footer.html')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading footer:', error);
+            });
+
+
+
+
+    </script>
+
+    <script>
+        // อัปเดตชื่อไฟล์เมื่อเลือกไฟล์
+        document.querySelectorAll('.custom-file-input').forEach(input => {
+            input.addEventListener('change', function () {
+                const fileName = this.files[0]?.name || "เลือกไฟล์";
+                const label = this.nextElementSibling; // หา label ที่อยู่ถัดจาก input
+                if (label && label.classList.contains('custom-file-label')) {
+                    label.textContent = fileName;
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
