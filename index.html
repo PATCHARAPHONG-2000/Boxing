@@ -102,66 +102,50 @@
                 return;
             }
 
-            Swal.fire({
-                title: "กำลังเข้าสู่ระบบ...",
-                html: "กรุณารอสักครู่ <b></b> วินาที.",
-                timer: 2000,
-                timerProgressBar: true,
-                didOpen: () => {
-                    Swal.showLoading();
-                    const b = Swal.getHtmlContainer().querySelector("b");
-                    setInterval(() => {
-                        b.textContent = Swal.getTimerLeft();
-                    }, 100);
+            fetch("http://localhost:3000/api/loginRoutes", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
                 },
-            }).then(() => {
-                window.location.href = "./pages/dashboard/";
-            });
-
-            // fetch("https://localhost:3000/Boxing/server/login.php", {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/x-www-form-urlencoded",
-            //     },
-            //     body: new URLSearchParams({
-            //         username, // ใช้ชื่อฟิลด์ที่ตรงกัน
-            //         password,
-            //     }).toString(),
-            // })
-            //     .then((response) => response.json())
-            //     .then((result) => {
-            //         if (result.status) {
-            //             Swal.fire({
-            //                 title: "กำลังเข้าสู่ระบบ...",
-            //                 html: "กรุณารอสักครู่ <b></b> วินาที.",
-            //                 timer: 2000,
-            //                 timerProgressBar: true,
-            //                 didOpen: () => {
-            //                     Swal.showLoading();
-            //                     const b = Swal.getHtmlContainer().querySelector("b");
-            //                     setInterval(() => {
-            //                         b.textContent = Swal.getTimerLeft();
-            //                     }, 100);
-            //                 },
-            //             }).then(() => {
-            //                 window.location.href = "./pages/dashboard/";
-            //             });
-            //         } else {
-            //             Swal.fire({
-            //                 icon: "error",
-            //                 title: "เข้าสู่ระบบล้มเหลว",
-            //                 text: result.error || "เกิดข้อผิดพลาด",
-            //             });
-            //         }
-            //     })
-            //     .catch((error) => {
-            //         console.error("เกิดข้อผิดพลาด:", error);
-            //         Swal.fire({
-            //             icon: "error",
-            //             title: "เกิดข้อผิดพลาด",
-            //             text: "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้",
-            //         });
-            //     });
+                body: new URLSearchParams({
+                    username,
+                    password,
+                }).toString(),
+            })
+                .then((response) => response.json())
+                .then((result) => {
+                    if (result.status) {
+                        Swal.fire({
+                            title: "กำลังเข้าสู่ระบบ...",
+                            html: "กรุณารอสักครู่ <b></b> วินาที.",
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading();
+                                const b = Swal.getHtmlContainer().querySelector("b");
+                                setInterval(() => {
+                                    b.textContent = Swal.getTimerLeft();
+                                }, 100);
+                            },
+                        }).then(() => {
+                            window.location.href = "./pages/dashboard/";
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: "error",
+                            title: "เข้าสู่ระบบล้มเหลว",
+                            text: result.error || "เกิดข้อผิดพลาด",
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("เกิดข้อผิดพลาด:", error);
+                    Swal.fire({
+                        icon: "error",
+                        title: "เกิดข้อผิดพลาด",
+                        text: "ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้",
+                    });
+                });
         });
 
     </script>

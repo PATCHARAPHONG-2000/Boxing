@@ -323,92 +323,81 @@
                         </div>
                     </div>
                 </div>
-                <div id="footer"></div>
             </div>
+        </div>
+        <div id="footer"></div>
+    </div>
 
-            <!-- Modal for Editing Scores -->
-            <div class="modal fade" id="editScoreModal" tabindex="-1" role="dialog"
-                aria-labelledby="editScoreModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="editScoreModalLabel">แก้ไขคะแนน</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="editScoreForm">
-                                <div class="row">
-                                    <!-- ฝั่งซ้าย (Red) -->
-                                    <div class="col-md-6 bg-danger text-white p-3">
-                                        <h5 class="text-white">ฝั่งแดง (Red)</h5>
-                                        <div class="form-group">
-                                            <label for="redScore1">Judge 1</label>
-                                            <input type="number" class="form-control" id="redScore1" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="redScore2">Judge 2</label>
-                                            <input type="number" class="form-control" id="redScore2" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="redScore3">Judge 3</label>
-                                            <input type="number" class="form-control" id="redScore3" required>
-                                        </div>
-                                    </div>
-
-                                    <!-- ฝั่งขวา (Blue) -->
-                                    <div class="col-md-6 bg-primary text-white p-3">
-                                        <h5 class="text-white">ฝั่งน้ำเงิน (Blue)</h5>
-                                        <div class="form-group">
-                                            <label for="blueScore1">Judge 1</label>
-                                            <input type="number" class="form-control" id="blueScore1" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="blueScore2">Judge 2</label>
-                                            <input type="number" class="form-control" id="blueScore2" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="blueScore3">Judge 3</label>
-                                            <input type="number" class="form-control" id="blueScore3" required>
-                                        </div>
-                                    </div>
+    <!-- Modal for Editing Scores -->
+    <div class="modal fade" id="editScoreModal" tabindex="-1" role="dialog" aria-labelledby="editScoreModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editScoreModalLabel">แก้ไขคะแนน</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editScoreForm">
+                        <div class="row">
+                            <!-- ฝั่งซ้าย (Red) -->
+                            <div class="col-md-6 bg-danger text-white p-3">
+                                <h5 class="text-white">ฝั่งแดง (Red)</h5>
+                                <div class="form-group">
+                                    <label for="redScore1">Judge 1</label>
+                                    <input type="number" class="form-control" id="redScore1" required>
                                 </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <!-- ปุ่มยกเลิก -->
-                            <button type="button" class="btn btn-primary" id="saveEdit">บันทึก</button>
+                                <div class="form-group">
+                                    <label for="redScore2">Judge 2</label>
+                                    <input type="number" class="form-control" id="redScore2" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="redScore3">Judge 3</label>
+                                    <input type="number" class="form-control" id="redScore3" required>
+                                </div>
+                            </div>
 
-                            <!-- ปุ่มบันทึก -->
-                            <button type="button" class="btn btn-secondary" id="cancelEdit">ยกเลิก</button>
+                            <!-- ฝั่งขวา (Blue) -->
+                            <div class="col-md-6 bg-primary text-white p-3">
+                                <h5 class="text-white">ฝั่งน้ำเงิน (Blue)</h5>
+                                <div class="form-group">
+                                    <label for="blueScore1">Judge 1</label>
+                                    <input type="number" class="form-control" id="blueScore1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="blueScore2">Judge 2</label>
+                                    <input type="number" class="form-control" id="blueScore2" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="blueScore3">Judge 3</label>
+                                    <input type="number" class="form-control" id="blueScore3" required>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- ปุ่มยกเลิก -->
+                    <button type="button" class="btn btn-primary" id="saveEdit">บันทึก</button>
+
+                    <!-- ปุ่มบันทึก -->
+                    <button type="button" class="btn btn-secondary" id="cancelEdit">ยกเลิก</button>
                 </div>
             </div>
-
-
         </div>
     </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    <div id="footer"></div>
-    </div>
-    <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
+
+
     <script src="../../plugins/jquery/jquery.min.js"></script>
+    <script src="../../plugins/fontawesome-free/js/all.min.js"></script>
     <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="../../plugins/sweetalert2/sweetalert2.min.js"></script>
     <script src="../../assets/js/adminlte.min.js"></script>
-    <script src="../../assets/js/index.js"></script>
 
     <script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
     <script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
     <script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../../plugins/bootstrap-5/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
 
@@ -440,7 +429,7 @@
                 console.error('Error loading footer:', error);
             });
     </script>
-    
+
     <script>
         $(document).ready(function () {
             // เพิ่ม event listener ให้กับปุ่มที่มี class .btn-save
@@ -554,46 +543,6 @@
                 });
             });
         });
-
-        function calculateTotalScores() {
-
-            const totalScores = {
-                red: [0, 0, 0],
-                blue: [0, 0, 0]
-            };
-
-            $('.round-card').each(function () {
-
-                if ($(this).find('h1.round').text().trim() === 'สรุปคะแนน') {
-                    return;
-                }
-                const redScores = $(this).find('.red-side input');
-                const blueScores = $(this).find('.blue-side input');
-
-                totalScores.red[0] += parseInt($(redScores[0]).val()) || 0;
-                totalScores.red[1] += parseInt($(redScores[1]).val()) || 0;
-                totalScores.red[2] += parseInt($(redScores[2]).val()) || 0;
-
-                totalScores.blue[0] += parseInt($(blueScores[0]).val()) || 0;
-                totalScores.blue[1] += parseInt($(blueScores[1]).val()) || 0;
-                totalScores.blue[2] += parseInt($(blueScores[2]).val()) || 0;
-            });
-            const summaryCard = $('.round-card').filter(function () {
-                return $(this).find('h1.round').text().trim() === 'สรุปคะแนน';
-            });
-
-            const redSummaryInputs = summaryCard.find('.red-side input');
-            const blueSummaryInputs = summaryCard.find('.blue-side input');
-
-            $(redSummaryInputs[0]).val(totalScores.red[0]);
-            $(redSummaryInputs[1]).val(totalScores.red[1]);
-            $(redSummaryInputs[2]).val(totalScores.red[2]);
-
-            $(blueSummaryInputs[0]).val(totalScores.blue[0]);
-            $(blueSummaryInputs[1]).val(totalScores.blue[1]);
-            $(blueSummaryInputs[2]).val(totalScores.blue[2]);
-        }
-
 
         $('.btn-save').on('click', function () {
             calculateTotalScores();
