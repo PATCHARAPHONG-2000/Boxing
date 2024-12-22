@@ -17,35 +17,68 @@
     <style>
         /* ปรับพื้นหลังและระยะห่างให้ตรงกับยกที่ 1-5 */
         /* ปรับพื้นหลังและระยะห่างให้ตรงกับยกที่ 1-5 */
-.round-card {
-    background: linear-gradient(to right, red 50%, blue 50%);
-    border-radius: 10px;
-    margin-bottom: 20px; /* ระยะห่างระหว่างรอบ */
-    padding: 15px; /* เพิ่มการ padding เพื่อให้พื้นที่ดูสมดุล */
-}
+        .round-card {
+            background: linear-gradient(to right, red 50%, blue 50%);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            /* ระยะห่างระหว่างรอบ */
+            padding: 15px;
+            /* เพิ่มการ padding เพื่อให้พื้นที่ดูสมดุล */
+        }
 
-.round {
-    background-color: transparent;
-}
+        .round {
+            background-color: transparent;
+        }
 
-.card-body {
-    padding-top: 1; /* ลบ padding บน */
-}
+        .card-body {
+            padding-top: 1;
+            /* ลบ padding บน */
+        }
 
-.col-md-4 {
-    margin-bottom: 20px; /* เพิ่มระยะห่างระหว่างคอลัมน์ */
-}
+        .col-md-4 {
+            margin-bottom: 20px;
+            /* เพิ่มระยะห่างระหว่างคอลัมน์ */
+        }
 
-/* เพิ่มการกำหนดความสูงของแต่ละรอบ */
-.round-card .round {
-    height: 100%;
-}
+        /* เพิ่มการกำหนดความสูงของแต่ละรอบ */
+        .round-card .round {
+            height: 100%;
+        }
 
-/* ปรับขนาดของปุ่มให้เหมาะสม */
-.btn-save {
-    width: 120px;
-}
+        /* ปรับขนาดของปุ่มให้เหมาะสม */
+        .btn-save {
+            width: 120px;
+        }
 
+        /* ส่วนของ card-header ห้ามแก้ ลบ เพิ่ม */
+
+        #matchContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100px;
+            margin: 0;
+            width: 100%;
+            font-size: 2.5vw;
+            /* ปรับขนาดฟอนต์ตามขนาดหน้าจอ */
+        }
+
+        .match-item span:nth-child(3) {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, red 50%, blue 50%);
+            background-clip: text;
+            color: transparent;
+        }
+
+        .text-vs {
+            margin: 0 10px 0 10px;
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, red 50%, blue 50%);
+            background-clip: text;
+            color: transparent;
+        }
     </style>
 </head>
 
@@ -59,23 +92,35 @@
                         <div class="col-12">
                             <div class="card shadow">
                                 <div class="card-header shadow">
-                                    <h2 class="mb-3">
-                                        กรอกคะแนน Manual
-                                    </h2>
-                                    <div class="mb-3 d-flex align-items-center">
+                                    <div class="d-flex justify-content-center align-items-center">
                                         <div class="dropdown">
-                                            <!-- Dropdown Button -->
-                                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="toggleDropdown()">
+                                            <h2>
+                                                กรอกข้อมูล Manual
+                                            </h2>
+                                            <button class="btn btn-danger dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
                                                 เลือกคู่มวย
                                             </button>
-                                            <!-- Dropdown Menu -->
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-
-                                                <a class="dropdown-item" href="#" onclick="selectBoxingMatch('บัวลอย vs บัวผัน')">บัวลอย vs บัวผัน</a>
-                                                <a class="dropdown-item" href="#" onclick="selectBoxingMatch('เมสซี่ vs โรนัลโด้')">เมสซี่ vs โรนัลโด้</a>
-                                                <a class="dropdown-item" href="#" onclick="selectBoxingMatch('เมกา vs อูฐ')">เมกา vs อูฐ</a>
+                                                <a class="dropdown-item" href="#"
+                                                    onclick="selectBoxingMatch('บัวลอย vs บัวผัน')">บัวลอย vs บัวผัน</a>
+                                                <a class="dropdown-item" href="#"
+                                                    onclick="selectBoxingMatch('เมสซี่ vs โรนัลโด้')">เมสซี่ vs
+                                                    โรนัลโด้</a>
+                                                <a class="dropdown-item" href="#"
+                                                    onclick="selectBoxingMatch('เมกา vs อูฐ')">เมกา vs อูฐ</a>
                                             </div>
-                                          </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <p class="text-center match-item" id="matchContainer">
+                                                <!-- สำหรับแสดงรายชื่อ -->
+                                                
+                                                <!-- ตัวอย่าง -->
+                                                คู่มวย : ทรงชัยน้อย เกียรติทรงฤทธิ์  <span class="text-vs"> VS </span> เพชรจีจ้า ลูกเจ้าพ่อโรงต้ม
+                                                <!-- ตัวอย่าง -->
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -90,24 +135,24 @@
                                                     <div class="red-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                     <div class="blue-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-3">
@@ -124,24 +169,24 @@
                                                     <div class="red-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                     <div class="blue-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-3">
@@ -158,24 +203,24 @@
                                                     <div class="red-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                     <div class="blue-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-3">
@@ -194,24 +239,24 @@
                                                     <div class="red-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                     <div class="blue-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-3">
@@ -228,24 +273,24 @@
                                                     <div class="red-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                     <div class="blue-side col-6">
                                                         <label class="text-white" lable="judge">JUDGE 1</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 2</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-2"
-                                                            placeholder="กรอกคะแนน" >
+                                                            placeholder="กรอกคะแนน">
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-3">
@@ -264,24 +309,24 @@
                                                     <div class="red-side col-6">
                                                         <label class="text-white" lable="judge">SUM JUDGE 1</label>
                                                         <input type="number" class="form-control mb-4"
-                                                            placeholder="สรุปคะแนน" disabled > 
+                                                            placeholder="สรุปคะแนน" disabled>
                                                         <label class="text-white" lable="judge">SUM JUDGE 2</label>
                                                         <input type="number" class="form-control mb-4"
-                                                            placeholder="สรุปคะแนน"disabled >
+                                                            placeholder="สรุปคะแนน" disabled>
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
                                                         <input type="number" class="form-control mb-4"
-                                                            placeholder="สรุปคะแนน"disabled >
+                                                            placeholder="สรุปคะแนน" disabled>
                                                     </div>
                                                     <div class="blue-side col-6">
                                                         <label class="text-white" lable="judge">SUM JUDGE 1</label>
                                                         <input type="number" class="form-control mb-4"
-                                                            placeholder="สรุปคะแนน"disabled >
+                                                            placeholder="สรุปคะแนน" disabled>
                                                         <label class="text-white" lable="judge">SUM JUDGE 2</label>
                                                         <input type="number" class="form-control mb-4"
                                                             placeholder="สรุปคะแนน" disabled>
                                                         <label class="text-white" lable="judge">SUM JUDGE 3</label>
                                                         <input type="number" class="form-control mb-4"
-                                                            placeholder="สรุปคะแนน"disabled >
+                                                            placeholder="สรุปคะแนน" disabled>
                                                     </div>
                                                 </div>
                                             </div>
@@ -296,7 +341,7 @@
                 </div>
             </div>
         </div>
-    <div id="footer"></div>
+        <div id="footer"></div>
     </div>
 
     <!-- scripts -->
@@ -360,7 +405,7 @@
             var dropdownMenu = document.getElementById('dropdownMenuButton');
             var isExpanded = dropdownMenu.getAttribute('aria-expanded') === 'true';
             dropdownMenu.setAttribute('aria-expanded', !isExpanded);
-            
+
             // Optionally toggle class 'show' for Bootstrap behavior (to keep dropdown open manually)
             var dropdownMenuElement = document.querySelector('.dropdown-menu');
             if (isExpanded) {
@@ -369,61 +414,61 @@
                 dropdownMenuElement.classList.add('show'); // Open it if closed
             }
         }
-    
+
         // Function that sets the selected value and keeps the dropdown open
         function selectBoxingMatch(match) {
             console.log("Selected match:", match); // Optionally log the selection
-    
+
             // You could also update the button text to reflect the selected match
             document.getElementById('dropdownMenuButton').innerText = match;
-    
+
             // Trigger the dropdown toggle to keep the dropdown open or perform custom behavior
             toggleDropdown();  // Call the function to toggle dropdown visibility (open/close)
         }
 
         function calculateTotalScores() {
 
-const totalScores = {
-    red: [0, 0, 0],
-    blue: [0, 0, 0]
-};
+            const totalScores = {
+                red: [0, 0, 0],
+                blue: [0, 0, 0]
+            };
 
-$('.round-card').each(function () {
+            $('.round-card').each(function () {
 
-    if ($(this).find('h1.round').text().trim() === 'สรุปคะแนน') {
-        return;
-    }
-    const redScores = $(this).find('.red-side input');
-    const blueScores = $(this).find('.blue-side input');
+                if ($(this).find('h1.round').text().trim() === 'สรุปคะแนน') {
+                    return;
+                }
+                const redScores = $(this).find('.red-side input');
+                const blueScores = $(this).find('.blue-side input');
 
-    totalScores.red[0] += parseInt($(redScores[0]).val()) || 0;
-    totalScores.red[1] += parseInt($(redScores[1]).val()) || 0;
-    totalScores.red[2] += parseInt($(redScores[2]).val()) || 0;
+                totalScores.red[0] += parseInt($(redScores[0]).val()) || 0;
+                totalScores.red[1] += parseInt($(redScores[1]).val()) || 0;
+                totalScores.red[2] += parseInt($(redScores[2]).val()) || 0;
 
-    totalScores.blue[0] += parseInt($(blueScores[0]).val()) || 0;
-    totalScores.blue[1] += parseInt($(blueScores[1]).val()) || 0;
-    totalScores.blue[2] += parseInt($(blueScores[2]).val()) || 0;
-});
-const summaryCard = $('.round-card').filter(function () {
-    return $(this).find('h1.round').text().trim() === 'สรุปคะแนน';
-});
+                totalScores.blue[0] += parseInt($(blueScores[0]).val()) || 0;
+                totalScores.blue[1] += parseInt($(blueScores[1]).val()) || 0;
+                totalScores.blue[2] += parseInt($(blueScores[2]).val()) || 0;
+            });
+            const summaryCard = $('.round-card').filter(function () {
+                return $(this).find('h1.round').text().trim() === 'สรุปคะแนน';
+            });
 
-const redSummaryInputs = summaryCard.find('.red-side input');
-const blueSummaryInputs = summaryCard.find('.blue-side input');
+            const redSummaryInputs = summaryCard.find('.red-side input');
+            const blueSummaryInputs = summaryCard.find('.blue-side input');
 
-$(redSummaryInputs[0]).val(totalScores.red[0]);
-$(redSummaryInputs[1]).val(totalScores.red[1]);
-$(redSummaryInputs[2]).val(totalScores.red[2]);
+            $(redSummaryInputs[0]).val(totalScores.red[0]);
+            $(redSummaryInputs[1]).val(totalScores.red[1]);
+            $(redSummaryInputs[2]).val(totalScores.red[2]);
 
-$(blueSummaryInputs[0]).val(totalScores.blue[0]);
-$(blueSummaryInputs[1]).val(totalScores.blue[1]);
-$(blueSummaryInputs[2]).val(totalScores.blue[2]);
-}
+            $(blueSummaryInputs[0]).val(totalScores.blue[0]);
+            $(blueSummaryInputs[1]).val(totalScores.blue[1]);
+            $(blueSummaryInputs[2]).val(totalScores.blue[2]);
+        }
 
 
-$('.btn-save').on('click', function () {
-calculateTotalScores();
-});
+        $('.btn-save').on('click', function () {
+            calculateTotalScores();
+        });
     </script>
 
 </body>

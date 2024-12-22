@@ -56,6 +56,36 @@
         .modal-body input {
             background-color: rgba(255, 255, 255, 0.8);
         }
+
+        /* ส่วนของ card-header ห้ามแก้ ลบ เพิ่ม */
+
+        #matchContainer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100px;
+            margin: 0;
+            width: 100%;
+            font-size: 2.5vw;
+            /* ปรับขนาดฟอนต์ตามขนาดหน้าจอ */
+        }
+
+        .match-item span:nth-child(3) {
+            font-size: 2.5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, red 50%, blue 50%);
+            background-clip: text;
+            color: transparent;
+        }
+
+        .text-vs {
+            margin: 0 10px 0 10px;
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(to right, red 50%, blue 50%);
+            background-clip: text;
+            color: transparent;
+        }
     </style>
 
 </head>
@@ -70,18 +100,34 @@
                         <div class="col-12">
                             <div class="card shadow">
                                 <div class="card-header shadow">
-                                    <h2 class="mb-3">
-                                        หน้ายืนยันคะแนน
-                                    </h2>
-                                    <div class="mb-3 d-flex align-items-center">
-                                        <div id="successAlert" class="alert alert-success alert-dismissible fade show"
-                                            role="alert">
-                                            <strong>บันทึกสำเร็จ</strong> บันทึกข้อมูลสำเร็จ
-                                            <button type="button" class="close"
-                                                onclick="document.getElementById('successAlert').style.display='none';"
-                                                aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
+                                    <div class="d-flex justify-content-center align-items-center">
+
+                                        <div class="dropdown">
+                                            <h2>
+                                                ยืนยันคะแนน
+                                            </h2>
+                                            <button class="btn btn-danger dropdown-toggle" type="button"
+                                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false">
+                                                เลือกยกที่
                                             </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" href="#" data-round="1">1</a>
+                                                <a class="dropdown-item" href="#" data-round="2">2</a>
+                                                <a class="dropdown-item" href="#" data-round="3">3</a>
+                                                <a class="dropdown-item" href="#" data-round="4">4</a>
+                                                <a class="dropdown-item" href="#" data-round="5">5</a>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1">
+                                            <p class="text-center match-item" id="matchContainer">
+                                                <!-- สำหรับแสดงรายชื่อ -->
+
+                                                <!-- ตัวอย่าง -->
+                                                คู่มวย : ทรงชัยน้อย เกียรติทรงฤทธิ์ <span class="text-vs"> VS </span>
+                                                เพชรจีจ้า ลูกเจ้าพ่อโรงต้ม
+                                                <!-- ตัวอย่าง -->
+                                            </p>
                                         </div>
                                     </div>
                                 </div>

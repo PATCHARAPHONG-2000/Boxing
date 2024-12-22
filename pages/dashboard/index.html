@@ -64,34 +64,37 @@
                                                 เลือกประเภทมวย
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMatchType">
-                                                <a class="dropdown-item" href="#">มวยสมัครเล่น</a>
-                                                <a class="dropdown-item" href="#">มวยอาชีพ</a>
+                                                <a class="dropdown-item" href="#" data-value="มวยอาชีพ">มวยอาชีพ</a>
+                                                <a class="dropdown-item" href="#" data-value="มวยสาธิต">มวยสาธิต</a>
                                             </div>
                                             <input type="hidden" id="Match_Type" name="Match_Type" required>
                                         </div>
                                         <button class="btn btn-warning btn-sm" id="clearDataButton"
-                                            onclick="clearAllData()">ลบข้อมูลทั้งหมด</button>
+                                            onclick="clearAllData()">
+                                            <i class="fa-solid fa-trash-can"></i> ลบข้อมูลทั้งหมด
+                                        </button>
                                     </div>
 
                                     <div class="p-2" id="form_demonstration_boxing">
                                         <div class="card-body">
 
-                                            <form class="needs-validation mt-3">
+                                            <form id="addDataForm-Match" enctype="multipart/form-data">
                                                 <!-- Match Name -->
                                                 <div class="mb-3">
-                                                    <label for="Match_Name" class="form-label">ชื่อแมตช์
-                                                        <span class="text-danger">*</span></label>
+                                                    <label for="Match_Name" class="form-label">ชื่อแมตช์ <span
+                                                            class="text-danger">*</span></label>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" id="Match_Name"
-                                                            name="Match_Name" placeholder="กรอกชื่อแมตช์"
-                                                            aria-label="Match Name" required>
+                                                        <input type="text" data-id="" class="form-control"
+                                                            id="Match_Name" name="Match_Name"
+                                                            placeholder="กรอกชื่อแมตช์" aria-label="Match Name"
+                                                            required>
                                                         <div class="input-group-append">
                                                             <button type="button" class="btn btn-success"
-                                                                id="lockMatchNameButton"
-                                                                onclick="saveMatchName()">บันทึก</button>
-                                                            <button type="button" class="btn btn-warning "
-                                                                id="editMatchNameButton"
-                                                                onclick="toggleEdit()">แก้ไข</button>
+                                                                id="lockMatchNameButton">บันทึก</button>
+                                                            <button type="button" class="btn btn-primary"
+                                                                id="updateMatchNameButton">อัพเดต</button>
+                                                            <button type="button" class="btn btn-warning"
+                                                                id="editMatchNameButton">แก้ไข</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -221,363 +224,8 @@
             });
     </script>
 
-    <script>
-        // อัปเดตชื่อไฟล์เมื่อเลือกไฟล์
-        document.querySelectorAll('.custom-file-input').forEach(input => {
-            input.addEventListener('change', function () {
-                const fileName = this.files[0]?.name || "เลือกไฟล์";
-                const label = this.nextElementSibling; // หา label ที่อยู่ถัดจาก input
-                if (label && label.classList.contains('custom-file-label')) {
-                    label.textContent = fileName;
-                }
-            });
-        });
-
-        document.addEventListener('DOMContentLoaded', function () {
-            fetch('https://ef56-2001-fb1-db-f6cd-107-8643-1334-d137.ngrok-free.app/api/sportPersonRoutes')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    renderTable(data.data);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                    swal.fire({
-                        icon: 'error',
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'ไม่สามารถโหลดข้อมูลได้',
-                        timer: 2000,
-                    })
-                });
-        });
-    
-        function renderTable(data) {    //ฟังก์ชัน renderTable สร้าง table
-            const tableBody = document.getElementById('dataTableBody'); //ดึงค่า id จาก Body ตาราง
-            tableBody.innerHTML = ''; // ประกาศตัวแปร HTML เพื่อให้ใช้ HTML ใน Javascript
-
-            const tableData = []; // การสร้างตัวแปร tableData เอาไว้สำหรับสร้าง
-            data.forEach((item, index) => {  //item คือข้อมูล, index คือตัวเลข เปลี่ยนได้ใช้ทั้งหมด number แปลงจาก data เป็น item index
-                tableData.push([    //ส่งให้ตารางแสดงข้อมูลโดยใช้ push
-                    index + 1,  // ลำดับในตาราง 
-                    item.person_red || 'ไม่ระบุ', //ชื่อฝ่ายแดงตาม column ที่ทำไว้ใน frontend
-                    item.person_blue || 'ไม่ระบุ',//ชื่อฝ่ายน้ำเงินตาม column ที่ทำไว้ใน frontend
-                    `<img src="${item.image_red || '../../assets/images/2000x700.png'}" alt="รูปภาพ" class="img-fluid" style="max-width: 150px;">`,  //เป็นรูปภาพฝ่ายแดงใช้วิธีเดียวกัน
-                    `<img src="${item.image_blue || '../../assets/images/2000x700.png'}" alt="รูปภาพ" class="img-fluid" style="max-width: 150px;">`,//เป็นรูปภาพฝ่ายน้ำเงินใช้วิธีเดียวกัน
-                    `<input class="toggle-event" data-id="${item.id}" type="checkbox" name="status"  
-                            ${item.IsActive ? 'checked' : ''} data-toggle="toggle" data-on="เผยแพร่" 
-                            data-off="ปิด" data-onstyle="success" data-style="ios">`, // ปุ่มเผยแพรใช้เป็น checkbox ใช้ plugin toggle 
-                    `<div class="btn-group" role="group">
-                        <button class="btn btn-warning edit-btn" data-id="${item.id}">แก้ไข</button> 
-                        <button class="btn btn-danger delete-btn" data-id="${item.id}">ลบ</button>
-                    </div>` // ปุ่มลบและแก้ไข
-                ]);
-            });
-
-            initDatatables(tableData); //ดึงค่าจากหัวตารางมาใช้
-        }
-
-        function initDatatables(tableData) { //ฟังก์ชันสร้างหัวตาราง
-            $('#matchDataTable').DataTable({ 
-                data: tableData,
-                destroy: true,
-                paging: true,
-                ordering: false,
-                searching: false,
-                responsive: true,
-                columns: [
-                    { title: "ลําดับ", className: "align-middle" },
-                    { title: "ชื่อมุมแดง", className: "align-middle" },
-                    { title: "ชื่อมุมน้ำเงิน", className: "align-middle" },
-                    { title: "รูปภาพมุมแดง", className: "align-middle" },
-                    { title: "รูปภาพมุมน้ำเงิน", className: "align-middle" },
-                    { title: "สถานะ", className: "align-middle" },
-                    { title: "จัดการ", className: "align-middle" },
-                ],
-
-                initComplete: function () {
-                    $('#matchDataTable thead th').css({
-                        'background-color': '#dc3545', // สีแดง
-                        'color': 'white' // สีข้อความในหัวตาราง
-                    });
-                    $(document).on('change', '.toggle-event', function () {
-                        const id = $(this).data('id');
-                        const status = $(this).prop('checked') ? 1 : 0; // ใช้ส่งค่า toggle-event status 1 และ 0 ค่า 1 คือเปิด 0 คือปิด
-
-                        fetch(`https://ef56-2001-fb1-db-f6cd-107-8643-1334-d137.ngrok-free.app/api/sportPersonRoutes/status/${id}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({ IsActive: status }) // ค่า status 1 และ 0
-                        }).then(response => {
-                            toastr.success("อัพเดทสถานะสำเร็จ!");
-                        }).catch(error => {
-                            toastr.error("อัพเดทสถานะไม่สําเร็จ!");
-                        });
-                    }); //อันนี้ใช้ PUT เพื่ออัพเดท column toggle ตาม ID ด้านบน
-
-                    $(document).on('click', '.delete-btn', function () { //ปุ่ม delete 
-                        const id = $(this).data('id');
-                        swal.fire({
-                            title: 'ยืนยันการลบ!',
-                            text: 'คุณยืนยันการลบข้อมูลใช่ไหม!',
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonText: 'ยืนยัน',
-                            cancelButtonText: 'ยกเลิก',
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                fetch(`https://ef56-2001-fb1-db-f6cd-107-8643-1334-d137.ngrok-free.app/api/sportPersonRoutes/${id}`, {
-                                    method: 'DELETE',
-                                    headers: {
-                                        'Content-Type': 'application/json' //กำหนด type เป็น json จำเป็นต้องกำหนดทุกอัน
-                                    },
-
-                                }).then(result => {
-                                    if (result.ok) {
-                                        swal.fire({
-                                            title: 'ลบข้อมูลสำเร็จ',
-                                            icon: 'success',
-                                            timer: 1000
-                                        });
-                                        $(`#row-${id}`).remove();
-                                        window.location.reload();
-                                    } else {
-                                        swal.fire({
-                                            title: 'เกิดข้อผิดพลาด',
-                                            text: 'ไม่สามารถลบข้อมูลได้',
-                                            icon: 'error'
-                                        });
-                                    }
-                                }).catch(error => {
-                                    console.error('Error:', error);
-                                    swal.fire({
-                                        title: 'เกิดข้อผิดพลาด',
-                                        text: 'กรุณาติดต่อแอดมิน',
-                                        icon: 'error'
-                                    });
-                                });
-                            }
-                        }).catch(error => {
-                            console.error('Error adding data:', error);
-                            Swal.fire({
-                                title: 'ข้อผิดพลาด!',
-                                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
-                                icon: 'error',
-                                confirmButtonText: 'ตกลง'
-                            });
-                        });
-                    });
 
 
-                    $(document).on('click', '.edit-btn', function () {
-                        const id = $(this).data('id');
-
-                        fetch(`https://ef56-2001-fb1-db-f6cd-107-8643-1334-d137.ngrok-free.app/api/sportPersonRoutes/${id}`)
-                            .then(response => {
-                                if (!response.ok) {
-                                    throw new Error('ไม่สามารถโหลดข้อมูลได้');
-                                }
-                                return response.json();
-                            })
-                            .then(data => {
-                                const personData = data.data.find(item => item.id === id); //แปลงข้อมูลจาก data มาเป็น ดึงเป็น id จะได้เป็น array แปลงจาก array เป็นค่า field ละก็ไปเช็คจาก id ว่าคือลำดับที่เท่าไหร่และไปแสดงใน html
-
-                                if (!personData) {
-                                    throw new Error('ไม่พบข้อมูลที่ต้องการ');
-                                }
-
-                                const { person_red, person_blue } = personData;
-
-                                swal.fire({
-                                    title: 'แก้ไขข้อมูล',
-                                    html: `
-                                        <div class="row mt-3">
-                                            <!-- Red -->
-                                            <div class="col-lg-6">
-                                                <div class="mb-5">
-                                                    <label for="Person_Red" class="form-label swal-lable">ชื่อมุมสีแดง</label>
-                                                    <input type="text" class="form-control" id="Person_Red" value="${person_red}" />
-                                                </div>
-                                                <div class="mb-3 mt-3">
-                                                    <label for="Image_Red" class="form-label swal-lable">เลือกรูปมุมสีแดง</label>
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" id="Image_Red" />
-                                                        <label class="custom-file-label" for="Image_Red">เลือกไฟล์</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Blue -->
-                                            <div class="col-lg-6">
-                                                <div class="mb-5">
-                                                    <label for="Person_Blue" class="form-label swal-lable">ชื่อมุมสีน้ำเงิน</label>
-                                                    <input type="text" class="form-control" id="Person_Blue" value="${person_blue}" />
-                                                </div>
-                                                <div class="mb-5">
-                                                    <label for="Image_Blue" class="form-label swal-lable">เลือกรูปมุมสีน้ำเงิน</label>
-                                                    <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" id="Image_Blue" />
-                                                        <label class="custom-file-label" for="Image_Blue">เลือกไฟล์</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    `,
-                                    showCancelButton: true,
-                                    confirmButtonText: 'บันทึก',
-                                    cancelButtonText: 'ยกเลิก',
-                                    showLoaderOnConfirm: true,
-
-                                    preConfirm: () => {
-                                        const personRed = document.getElementById('Person_Red').value;
-                                        const personBlue = document.getElementById('Person_Blue').value;
-                                        const imageRed = document.getElementById('Image_Red').files[0];
-                                        const imageBlue = document.getElementById('Image_Blue').files[0];
-
-                                        const formData = new FormData();
-                                        formData.append('person_red', personRed);
-                                        formData.append('person_blue', personBlue);
-                                        if (imageRed) formData.append('image_red', imageRed);
-                                        if (imageBlue) formData.append('image_blue', imageBlue);
-
-                                        document.querySelectorAll('.custom-file-input').forEach(input => {
-                                            input.addEventListener('change', function () {
-                                                const fileName = this.files[0]?.name || "เลือกไฟล์";
-                                                const label = this.nextElementSibling; // หา label ที่อยู่ถัดจาก input
-                                                if (label && label.classList.contains('custom-file-label')) {
-                                                    label.textContent = fileName;
-                                                }
-                                            });
-                                        });
-
-
-                                        return fetch(`https://ef56-2001-fb1-db-f6cd-107-8643-1334-d137.ngrok-free.app/api/sportPersonRoutes/${id}`, {
-                                            method: 'PUT',
-                                            body: formData
-                                        })
-                                            .then(response => {
-                                                if (!response.ok) {
-                                                    throw new Error('ไม่สามารถบันทึกข้อมูลได้');
-                                                }
-                                                return response.json();
-                                            })
-                                            .then(result => {
-                                                if (!result.status) {
-                                                    throw new Error(result.message || 'เกิดข้อผิดพลาดในการบันทึก');
-                                                }
-                                                return result;
-                                            });
-                                    },
-                                    customClass: {
-                                        popup: 'swal-style',
-                                        title: 'title-style'
-                                    }
-                                })
-                                    .then(result => {
-                                        if (result.isConfirmed) {
-                                            swal.fire({
-                                                title: 'ยืนยันการบันทึก',
-                                                text: 'คุณต้องการบันทึกข้อมูลหรือไม่?',
-                                                icon: 'warning',
-                                                showCancelButton: true,
-                                                confirmButtonText: 'ใช่, บันทึก',
-                                                cancelButtonText: 'ยกเลิก'
-                                            }).then(confirmation => {
-                                                if (confirmation.isConfirmed) {
-                                                    swal.fire('สำเร็จ!', 'บันทึกข้อมูลเรียบร้อยแล้ว', 'success')
-                                                        .then(() => location.reload());
-                                                }
-                                            });
-                                        }
-                                    })
-                                    .catch(error => {
-                                        console.error('Error:', error);
-                                        swal.fire('ผิดพลาด!', error.message || 'ไม่สามารถดำเนินการได้', 'error');
-                                    });
-                            })
-                            .catch(error => {
-                                console.error('Error:', error);
-                                swal.fire('ผิดพลาด!', 'ไม่สามารถดึงข้อมูลได้', 'error');
-                            });
-                    });
-
-                },
-                fnDrawCallback: function () {
-                    $('.toggle-event').bootstrapToggle();
-                },
-
-                language: {
-                    lengthMenu: "แสดง _MENU_ รายการต่อหน้า",
-                    zeroRecords: "ไม่พบข้อมูล",
-                    info: "แสดงหน้าที่ _PAGE_ จาก _PAGES_",
-                    infoEmpty: "ไม่พบข้อมูล",
-                    infoFiltered: "(กรองจากทั้งหมด _MAX_ รายการ)",
-                    search: "ค้นหา",
-                    paginate: {
-                        first: "หน้าแรก",
-                        last: "หน้าสุดท้าย",
-                        next: "ถัดไป",
-                        previous: "ก่อนหน้า",
-                    },
-                }
-
-            })
-        }
-
-
-
-        function addData() {
-            const form = document.getElementById('addDataForm');
-            const formData = new FormData(form);
-
-            console.log('Form Data:', ...formData.entries()); // ตรวจสอบข้อมูลก่อนส่ง
-
-            fetch('https://ef56-2001-fb1-db-f6cd-107-8643-1334-d137.ngrok-free.app/api/sportPersonRoutes', {
-                method: 'POST',
-                body: formData,
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Failed to add data. Status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Response:', data);
-                    if (data.status) {
-                        Swal.fire({
-                            title: 'สำเร็จ!',
-                            text: 'เพิ่มข้อมูลเรียบร้อยแล้ว',
-                            icon: 'success',
-                            timer: 1000,
-                            confirmButtonText: 'ตกลง'
-                        }).then(() => location.reload());
-                    } else {
-                        Swal.fire({
-                            title: 'ข้อผิดพลาด!',
-                            text: data.message || 'ไม่สามารถเพิ่มข้อมูลได้',
-                            icon: 'error',
-                            confirmButtonText: 'ตกลง'
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error adding data:', error);
-                    Swal.fire({
-                        title: 'ข้อผิดพลาด!',
-                        text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
-                        icon: 'error',
-                        confirmButtonText: 'ตกลง'
-                    });
-                });
-        }
-
-    </script>
 </body>
 
 </html>
