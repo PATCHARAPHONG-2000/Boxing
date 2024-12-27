@@ -121,12 +121,7 @@
                                         </div>
                                         <div class="flex-grow-1">
                                             <p class="text-center match-item" id="matchContainer">
-                                                <!-- สำหรับแสดงรายชื่อ -->
-
-                                                <!-- ตัวอย่าง -->
-                                                คู่มวย : ทรงชัยน้อย เกียรติทรงฤทธิ์ <span class="text-vs"> VS </span>
-                                                เพชรจีจ้า ลูกเจ้าพ่อโรงต้ม
-                                                <!-- ตัวอย่าง -->
+                                                <!-- Remove the hardcoded example -->
                                             </p>
                                         </div>
                                     </div>
@@ -135,7 +130,7 @@
                                     <div class="row">
                                         <!-- ยกที่1 -->
                                         <div class="col-md-4">
-                                            <div class="round-card p-3"
+                                            <div class="round-card p-3 round1"
                                                 style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
                                                     <div class="edit-icon">
@@ -163,7 +158,7 @@
                                                         <input type="number" placeholder="รอคะแนน"
                                                             class="form-control mb-2" disabled>
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
+                                                        <input type="number" placeholder="รอคะ��นน"
                                                             class="form-control mb-2" disabled>
                                                     </div>
                                                 </div>
@@ -175,7 +170,7 @@
                                         </div>
 
                                         <div class="col-md-4">
-                                            <div class="round-card p-3"
+                                            <div class="round-card p-3 round2"
                                                 style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
                                                     <div class="edit-icon">
@@ -214,7 +209,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="round-card p-3"
+                                            <div class="round-card p-3 round3"
                                                 style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
                                                     <div class="edit-icon">
@@ -242,7 +237,7 @@
                                                         <input type="number" placeholder="รอคะแนน"
                                                             class="form-control mb-2" disabled>
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
+                                                        <input type="number" placeholder="รอค��แนน"
                                                             class="form-control mb-2" disabled>
                                                     </div>
                                                 </div>
@@ -253,7 +248,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="round-card p-3"
+                                            <div class="round-card p-3 round4"
                                                 style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
                                                     <div class="edit-icon">
@@ -281,7 +276,7 @@
                                                         <input type="number" placeholder="รอคะแนน"
                                                             class="form-control mb-2" disabled>
                                                         <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
+                                                        <input type="number" placeholder="รอคะ��นน"
                                                             class="form-control mb-2" disabled>
                                                     </div>
                                                 </div>
@@ -292,7 +287,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-4">
-                                            <div class="round-card p-3"
+                                            <div class="round-card p-3 round5"
                                                 style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
                                                 <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
                                                     <div class="edit-icon">
@@ -514,7 +509,7 @@
         });
 
         $(document).ready(function () {
-            let currentCard; // การ์ดปัจจุบันที่แก้ไข
+            let currentCard; // การ์ดปัจจุันที่แก้ไข
             let originalValues = {}; // เก็บค่าดั้งเดิมของการ์ด
 
             // เมื่อคลิกปุ่ม Edit
@@ -593,6 +588,43 @@
         $('.btn-save').on('click', function () {
             calculateTotalScores();
         });
+    </script>
+
+    <script>
+    function loadActiveMatch() {
+        $.ajax({
+            url: 'get_active_match.php',
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                console.log('Response:', response); // Debug log
+                if (response && response.status === 'success' && response.data) {
+                    const match = response.data;
+                    const matchHtml = `
+                        <span class="match-item">
+                            ${match.person_red} <span class="text-vs">VS</span> ${match.person_blue}
+                        </span>
+                    `;
+                    $('#matchContainer').html(matchHtml);
+                } else {
+                    $('#matchContainer').html('<span class="text-muted">ไม่มีคู่มวยที่กำลังแข่งขัน</span>');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Ajax Error:', error);
+                console.error('Response Text:', xhr.responseText);
+                $('#matchContainer').html('<span class="text-danger">เกิดข้อผิดพลาดในการโหลดข้อมูล</span>');
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        // โหลดข้อมูลคู่มวยเมื่อโหลดหน้าเว็บ
+        loadActiveMatch();
+        
+        // รีเฟรชข้อมูลทุก 10 วินาที
+        setInterval(loadActiveMatch, 10000);
+    });
     </script>
 </body>
 

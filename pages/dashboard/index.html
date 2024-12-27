@@ -39,6 +39,22 @@
         .title-style {
             font-size: 30px;
         }
+
+        /* Table styles */
+        #matchDataTable {
+            border-radius: 10px;
+            overflow: hidden;  /* This ensures the border-radius is visible */
+        }
+
+        #matchDataTable thead th {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* Optional: Add some spacing around the table */
+        .card-body.table-responsive {
+            padding: 15px;
+        }
     </style>
 
 </head>
@@ -64,7 +80,7 @@
                                                 เลือกประเภทมวย
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMatchType">
-                                                <a class="dropdown-item" href="#" data-value="มวยอาชีพ">มวยอาชีพ</a>
+                                                <a class="dropdown-item" href="#" data-value="มวยสากล">มวยสากล</a>
                                                 <a class="dropdown-item" href="#" data-value="มวยสาธิต">มวยสาธิต</a>
                                             </div>
                                             <input type="hidden" id="Match_Type" name="Match_Type" required>
@@ -91,8 +107,6 @@
                                                         <div class="input-group-append">
                                                             <button type="button" class="btn btn-success"
                                                                 id="lockMatchNameButton">บันทึก</button>
-                                                            <button type="button" class="btn btn-primary"
-                                                                id="updateMatchNameButton">อัพเดต</button>
                                                             <button type="button" class="btn btn-warning"
                                                                 id="editMatchNameButton">แก้ไข</button>
                                                         </div>
@@ -157,9 +171,19 @@
                                         </div>
 
                                         <div class="card-body table-responsive mt-4">
-                                            <table id="matchDataTable" class="table table-striped table-hover">
-                                                <tbody id="dataTableBody">
-                                                    <!-- ตารางจะแสดงข้อมูลที่เพิ่มเข้ามา    -->
+                                            <table id="matchDataTable" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5%">ลำดับ</th>
+                                                        <th width="20%">ชื่อฝ่ายแดง</th>
+                                                        <th width="20%">ชื่อฝ่ายน้ำเงิน</th>
+                                                        <th width="20%">รูปฝ่ายแดง</th>
+                                                        <th width="20%">รูปฝ่ายน้ำเงิน</th>
+                                                        <th width="5%">สถานะ</th>
+                                                        <th width="10%">จัดการ</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -222,6 +246,562 @@
             .catch(error => {
                 console.error('Error loading footer:', error);
             });
+
+        // จัดการฟังก์ชันัันทึกข้อมูล
+        function getLastSportPersonId() {
+            return $.ajax({
+                url: 'get_last_sport_person_id.php',
+                type: 'GET',
+                dataType: 'json'
+            });
+        }
+
+        function addData() {
+            // ป้องกันการ submit ซ้ำ
+            $('#addDataForm button[type="button"]').prop('disabled', true);
+
+            // ตรวจสอบการเลือกประเภทมวย
+            if (!$('#Match_Type').val()) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'กรุณาเลือกประเภทมวย',
+                    text: 'โปรดเลือกประเภทมวยก่อนบันทึกข้อมูล',
+                    confirmButtonText: 'ตกลง'
+                });
+                $('#addDataForm button[type="button"]').prop('disabled', false);
+                return false;
+            }
+
+            // ตรวจสอบการกรอกชื่อแมตช์และชื่อนักมวย
+            // ... (โค้ดตรวจสอบอื่นๆ คงเดิม) ...
+
+            // ดึงเลขลำดับล่าสุดก่อนบันทึก
+            getLastSportPersonId().then(function(response) {
+                const lastNumber = response.last_number || 0;
+                const newNumber = lastNumber + 1;
+                const sportPersonId = 'SP-' + String(newNumber).padStart(5, '0'); // เช่น SP-00001
+
+                // สร้าง FormData object
+                const formData = new FormData();
+                
+                // เพิ่มข้อมูลเข้า FormData
+                formData.append('Match_Name', $('#Match_Name').val());
+                formData.append('Match_Type', $('#Match_Type').val());
+                formData.append('person_red', $('#person_red').val());
+                formData.append('person_blue', $('#person_blue').val());
+                formData.append('sport_person_id', sportPersonId);
+
+                // เพิ่มไฟล์รูปภาพ (ถ้ามี)
+                const imageRed = $('#inputImageRed')[0].files[0];
+                const imageBlue = $('#inputImageBlue')[0].files[0];
+                
+                if (imageRed) {
+                    formData.append('image_red', imageRed);
+                }
+                if (imageBlue) {
+                    formData.append('image_blue', imageBlue);
+                }
+
+                // ส่งข้อมูลไปยัง PHP
+                $.ajax({
+                    url: 'save_match.php',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#addDataForm button[type="button"]').prop('disabled', false);
+                        try {
+                            const result = JSON.parse(response);
+                            if (result.status === 'success') {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'บันทึกสำเร็จ',
+                                    text: 'ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว',
+                                    confirmButtonText: 'ตกลง'
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        // ล้างฟอร์มและรีเฟรชตาราง
+                                        $('#person_red').val('');
+                                        $('#person_blue').val('');
+                                        $('.custom-file-label').html('เลือกไฟล์');
+                                        $('#inputImageRed').val('');
+                                        $('#inputImageBlue').val('');
+                                        refreshTable();
+                                    }
+                                });
+                            } else {
+                                throw new Error(result.message || 'ไม่สามารถบันทึกข้อมูลได้');
+                            }
+                        } catch (e) {
+                            console.error('Error parsing response:', e);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: 'ไม่สามารถบันทึกได้',
+                                confirmButtonText: 'ตกลง'
+                            });
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#addDataForm button[type="button"]').prop('disabled', false);
+                        console.error('AJAX Error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สา���ารถเชื่่อมต่อกับเซิร์ฟเวอร์',
+                            confirmButtonText: 'ตกลง'
+                        });
+                    }
+                });
+            }).catch(function(error) {
+                console.error('Error getting last ID:', error);
+                $('#addDataForm button[type="button"]').prop('disabled', false);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถดึงรหัสล่าสุดได้',
+                    confirmButtonText: 'ตกลง'
+                });
+            });
+
+            return false;
+        }
+        // แสดงชื่อไฟล์ที่เลือก
+        $('.custom-file-input').on('change', function() {
+            const fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+
+        // ฟังก์ชันล้างข้อมูลทั้งหมด
+        function clearAllData() {
+            Swal.fire({
+                title: 'ยืนยันการลบข้อมูล',
+                text: "คุณต้องการลบข้อมูลทั���งหมดใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'ใช่, ลบทั้งหมด',
+                cancelButtonText: 'ยกเลิก'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // ส่ง request ไปลบข้อมูลทั้งหมด
+                    $.ajax({
+                        url: 'delete_all_matches.php',
+                        type: 'POST',
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.status === 'success') {
+                                // ล้างค่าในฟอร์ม
+                                $('#person_red').val('');
+                                $('#person_blue').val('');
+                                $('#Match_Type').val('');
+                                $('#Match_Name').val('');
+                                $('#dropdownMatchType').text('เลือกประเภทมวย');
+                                $('.dropdown-item').removeClass('active');
+                                $('.custom-file-label').html('เลือกไฟล์');
+                                $('#inputImageRed').val('');
+                                $('#inputImageBlue').val('');
+                                
+                                // ล้างค่าใน localStorage
+                                localStorage.removeItem('selectedMatchType');
+                                
+                                // รีเฟรชตาราง
+                                $('#matchDataTable').DataTable().ajax.reload();
+                                
+                                // แสดงข้อความสำเร็จ
+                                Swal.fire(
+                                    'ลบสำเร็จ!',
+                                    'ข้อมูลทั้งหมดถูกลบเรียบร้อยแล้ว',
+                                    'success'
+                                );
+                            } else {
+                                Swal.fire(
+                                    'เกิดข้อผิดพลาด!',
+                                    response.message || 'ไม่สามารถลบข้อมูลได้',
+                                    'error'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error:', error);
+                            Swal.fire(
+                                'เกิดข้อผิดพลาด!',
+                                'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
+                                'error'
+                            );
+                        }
+                    });
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            // เพิ่ม event handler สำหรับ dropdown ประเภทมวย
+            $('.dropdown-menu .dropdown-item').click(function(e) {
+                e.preventDefault();
+                const selectedValue = $(this).data('value');
+                const dropdownButton = $('#dropdownMatchType');
+                
+                // อัพเดทข้อความบนปุ่ม
+                dropdownButton.text(selectedValue);
+                
+                // เก็บค่าที่เลือกใน hidden input
+                $('#Match_Type').val(selectedValue);
+                
+                // เพิ่ม visual feedback
+                $('.dropdown-item').removeClass('active');
+                $(this).addClass('active');
+            });
+
+            // Initialize DataTable
+            var table = $('#matchDataTable').DataTable({
+                "processing": true,
+                "ajax": {
+                    "url": "get_match_data.php",
+                    "dataSrc": "data"
+                },
+                "columns": [
+                    { 
+                        "data": null,
+                        "render": function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    { "data": "person_red" },
+                    { "data": "person_blue" },
+                    { 
+                        "data": "image_red",
+                        "render": function(data, type, row) {
+                            if (data) {
+                                return '<img src="../../' + data + '" class="img-thumbnail" width="100">';
+                            }
+                            return 'ไม่มีรูป';
+                        }
+                    },
+                    { 
+                        "data": "image_blue",
+                        "render": function(data, type, row) {
+                            if (data) {
+                                return '<img src="../../' + data + '" class="img-thumbnail" width="100">';
+                            }
+                            return 'ไม่มีรูป';
+                        }
+                    },
+                    {
+                        "data": "isActive",
+                        "render": function(data, type, row) {
+                            // ตรวจสอบค่าและแปลงเป็น boolean อย่างเข้มงวด
+                            const isActive = (data === '1' || data === 1 || data === true);
+                            console.log('isActive value from DB:', data, 'converted to:', isActive); // Debug log
+                            
+                            return `<div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input status-toggle" 
+                                    id="statusSwitch${row.id}" 
+                                    ${isActive ? 'checked' : ''} 
+                                    data-id="${row.id}"
+                                    data-current-status="${isActive ? '1' : '0'}">
+                                <label class="custom-control-label" for="statusSwitch${row.id}"></label>
+                            </div>`;
+                        }
+                    },
+                    {
+                        "data": null,
+                        "render": function(data, type, row) {
+                            return `
+                                <button class="btn btn-warning btn-sm edit-btn" data-id="${row.id}">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-danger btn-sm delete-btn" data-id="${row.id}">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            `;
+                        }
+                    }
+                ],
+                "language": {
+                    "lengthMenu": "แสดง _MENU_ รายการ",
+                    "zeroRecords": "ไม่พบข้อมูล",
+                    "info": "แสดงหน้า _PAGE_ จาก _PAGES_",
+                    "infoEmpty": "ไม่มีข้อมูล",
+                    "infoFiltered": "(กรองจากทั้งหมด _MAX_ รายการ)",
+                    "search": "ค้นหา:",
+                    "paginate": {
+                        "first": "หน้าแรก",
+                        "last": "หน้าสุข้าย",
+                        "next": "ถัดไป",
+                        "previous": "ก่อนหน้า"
+                    }
+                },
+                "order": [[0, 'asc']]
+            });
+
+            // Handle Edit Button Click
+            $('#matchDataTable').on('click', '.edit-btn', function() {
+                var id = $(this).data('id');
+                var row = $(this).closest('tr');
+                var person_red = row.find('td:eq(1)').text();
+                var person_blue = row.find('td:eq(2)').text();
+                var image_red = row.find('td:eq(3) img').attr('src') || '';
+                var image_blue = row.find('td:eq(4) img').attr('src') || '';
+                
+                Swal.fire({
+                    title: 'แก้ไขข้อมูล',
+                    html: `
+                        <form id="editForm">
+                            <div class="row">
+                                <!-- ฝ่ายแดง -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="edit_person_red" class="font-weight-bold text-danger">
+                                            ฝ่ายแดง
+                                        </label>
+                                        <input type="text" 
+                                            class="form-control" 
+                                            id="edit_person_red" 
+                                            value="${person_red}" 
+                                            required
+                                            placeholder="ชื่อนักมวยฝ่ายแดง">
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="edit_image_red" class="font-weight-bold text-danger">รูปฝ่ายแดง</label>
+                                        ${image_red ? `
+                                            <div class="mb-2">
+                                                <img src="${image_red}" class="img-thumbnail" width="150">
+                                            </div>
+                                        ` : '<p class="text-muted">ไม่มีรูปภาพ</p>'}
+                                        <input type="file" 
+                                            class="form-control" 
+                                            id="edit_image_red"
+                                            accept="image/*">
+                                    </div>
+                                </div>
+
+                                <!-- ฝ่ายน้ำเงิน -->
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="edit_person_blue" class="font-weight-bold text-primary">
+                                            ฝ่ายน้ำเงิน
+                                        </label>
+                                        <input type="text" 
+                                            class="form-control" 
+                                            id="edit_person_blue" 
+                                            value="${person_blue}" 
+                                            required
+                                            placeholder="ชื่อนักมวยฝ่ายน้ำเงิน">
+                                    </div>
+                                    <div class="form-group mt-3">
+                                        <label for="edit_image_blue class="font-weight-bold text-primary">รูปฝ่ายน้ำเงิน</label>
+                                        ${image_blue ? `
+                                            <div class="mb-2">
+                                                <img src="${image_blue}" class="img-thumbnail" width="150">
+                                            </div>
+                                        ` : '<p class="text-muted">ไม่มีรูปภาพ</p>'}
+                                        <input type="file" 
+                                            class="form-control" 
+                                            id="edit_image_blue"
+                                            accept="image/*">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    `,
+                    width: '800px', // เพิ่มความกว้างของ modal
+                    showCancelButton: true,
+                    confirmButtonText: 'บันทึก',
+                    cancelButtonText: 'ยกเลิก',
+                    showLoaderOnConfirm: true,
+                    preConfirm: () => {
+                        // ตรวจสอบการกรอกข้อมูล
+                        const person_red = $('#edit_person_red').val();
+                        const person_blue = $('#edit_person_blue').val();
+
+                        if (!person_red || !person_blue) {
+                            Swal.showValidationMessage('กรุณากรอกชื่อให้ครบทั้งสองฝ่าย');
+                            return false;
+                        }
+
+                        const formData = new FormData();
+                        formData.append('id', id);
+                        formData.append('person_red', person_red);
+                        formData.append('person_blue', person_blue);
+                        
+                        const imageRed = $('#edit_image_red')[0].files[0];
+                        const imageBlue = $('#edit_image_blue')[0].files[0];
+                        
+                        if (imageRed) formData.append('image_red', imageRed);
+                        if (imageBlue) formData.append('image_blue', imageBlue);
+
+                        return $.ajax({
+                            url: 'update_match.php',
+                            type: 'POST',
+                            data: formData,
+                            processData: false,
+                            contentType: false
+                        }).then(response => {
+                            try {
+                                return JSON.parse(response);
+                            } catch (error) {
+                                throw new Error('เกิดข้อผิดพลาดในการประมวลผลขอมูล');
+                            }
+                        });
+                    },
+                    allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        if (result.value.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'สำเร็จ',
+                                text: 'อัพเดทข้อมูลเรียบร้อยแล้ว'
+                            }).then(() => {
+                                // รีเฟรชตาราง
+                                $('#matchDataTable').DataTable().ajax.reload();
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: result.value.message || 'ไม่สามารถอัพเดทข้อมูลได้'
+                            });
+                        }
+                    }
+                });
+            });
+
+            // Handle Delete Button Click
+            $('#matchDataTable').on('click', '.delete-btn', function() {
+                var id = $(this).data('id');
+                Swal.fire({
+                    title: 'ยืนยันการลบ',
+                    text: "คุณต้องการลบข้อมูลนี้ใช่หรือไม่?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'ใช่, ลบข้อมูล',
+                    cancelButtonText: 'ยกเลิก'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // เพิ่มโค้ดสำหรับการลบข้อมูล
+                        $.ajax({
+                            url: 'delete_match.php',
+                            type: 'POST',
+                            data: { id: id },
+                            success: function(response) {
+                                try {
+                                    const result = JSON.parse(response);
+                                    if (result.status === 'success') {
+                                        Swal.fire(
+                                            'ลบสำเร็จ!',
+                                            'ข้อมูลถูกลบเรียบร้อยแล้ว',
+                                            'success'
+                                        );
+                                        table.ajax.reload();
+                                    } else {
+                                        throw new Error(result.message);
+                                    }
+                                } catch (e) {
+                                    Swal.fire(
+                                        'เกิดข้อผิดพลาด!',
+                                        e.message,
+                                        'error'
+                                    );
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
+            // จัดการปุ่มบันทึกและแก้ไขชื่อแม���ช์
+            $('#editMatchNameButton').hide();
+
+            // เมื่อกดปุ่มบันทึกชื่อแมตช์
+            $('#lockMatchNameButton').click(function() {
+                const matchName = $('#Match_Name').val();
+                if (!matchName) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'กรุณากรอกชื่อแมตช์',
+                        text: 'โปรดกรอกชื่อแมตช์ก่อนบันทึก',
+                        confirmButtonText: 'ตกลง'
+                    });
+                    return;
+                }
+
+                // ล็อคการแก้ไข
+                $('#Match_Name').prop('readonly', true);
+                // เปลี่ยนสีพื้นหลังให้เห็นว่าถูกล็อค
+                $('#Match_Name').css('background-color', '#e9ecef');
+                // ซ่อนปุ่มบันทึกและแสดงปุ่มแก้ไข
+                $('#lockMatchNameButton').hide();
+                $('#editMatchNameButton').show();
+            });
+
+            // เมื่อกดปุ่มแก้ไขชื่อแมตช์
+            $('#editMatchNameButton').click(function() {
+                // ปลดล็อคการแก้ไข
+                $('#Match_Name').prop('readonly', false);
+                // เปลี่ยนสีพื้นหลังกลับเป็นปกติ
+                $('#Match_Name').css('background-color', '#fff');
+                // ซ่อนปุ่มแก้ไขและแสดงปุ่มบันทึก
+                $('#editMatchNameButton').hide();
+                $('#lockMatchNameButton').show();
+                // โฟัสที่ช่องกรอกข้อมูล
+                $('#Match_Name').focus();
+            });
+
+            // เพิ่ม event handler สำหรับ toggle switch
+            $('#matchDataTable').on('change', '.status-toggle', function() {
+                const toggleElement = $(this);
+                const id = toggleElement.data('id');
+                // ใช้ checked property แทนการอ่านจาก data attribute
+                const newStatus = toggleElement.prop('checked') ? 1 : 0;
+                
+                // Disable toggle while processing
+                toggleElement.prop('disabled', true);
+                
+                console.log('Updating status:', { id, newStatus }); // Debug log
+                
+                $.ajax({
+                    url: 'update_status.php',
+                    type: 'POST',
+                    data: {
+                        id: id,
+                        isActive: newStatus
+                    },
+                    dataType: 'json'
+                })
+                .done(function(response) {
+                    console.log('Server response:', response); // Debug log
+                    if (response.status === 'success') {
+                        // อัพเดท data-current-status
+                        toggleElement.data('current-status', newStatus);
+                        toastr.success(response.message);
+                    } else {
+                        // ถ้าไม่สำเร็จให้กลับ���ปค่าเดิม
+                        toggleElement.prop('checked', !toggleElement.prop('checked'));
+                        toastr.error(response.message);
+                    }
+                })
+                .fail(function(jqXHR) {
+                    console.error('Server Error:', jqXHR.responseText);
+                    // กลับไปค่าเดิมเมื่อเกิดข้อผิดพลาด
+                    toggleElement.prop('checked', !toggleElement.prop('checked'));
+                    toastr.error('เกิดข้อผิดพลาดในการอัพเดทสถานะ');
+                })
+                .always(function() {
+                    toggleElement.prop('disabled', false);
+                });
+            });
+        });
+
+        // Refresh table after adding new data
+        function refreshTable() {
+            $('#matchDataTable').DataTable().ajax.reload();
+        }
     </script>
 
 
