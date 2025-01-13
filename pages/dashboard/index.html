@@ -97,18 +97,24 @@
                                             <form id="addDataForm-Match" enctype="multipart/form-data">
                                                 <!-- Match Name -->
                                                 <div class="mb-3">
-                                                    <label for="Match_Name" class="form-label">ชื่อแมตช์ <span
+                                                    <label for="data_match" class="form-label">ชื่อแมตช์ <span
                                                             class="text-danger">*</span></label>
                                                     <div class="input-group">
-                                                        <input type="text" data-id="" class="form-control"
-                                                            id="Match_Name" name="Match_Name"
-                                                            placeholder="กรอกชื่อแมตช์" aria-label="Match Name"
+                                                        <input type="text" 
+                                                            data-id="" 
+                                                            class="form-control"
+                                                            id="data_match" 
+                                                            name="data_match"
+                                                            placeholder="กรอกชื่อแมตช์" 
+                                                            aria-label="Match Name"
                                                             required>
                                                         <div class="input-group-append">
-                                                            <button type="button" class="btn btn-success"
-                                                                id="lockMatchNameButton">บันทึก</button>
                                                             <button type="button" class="btn btn-warning"
                                                                 id="editMatchNameButton">แก้ไข</button>
+                                                            <button type="button" class="btn btn-primary"
+                                                                id="updateMatchNameButton">อัพเดท</button>
+                                                            <button type="button" class="btn btn-success"
+                                                                id="lockMatchNameButton">บันทึก</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -250,46 +256,62 @@
         // จัดการฟังก์ชันัันทึกข้อมูล
         function getLastSportPersonId() {
             return $.ajax({
-                url: 'get_last_sport_person_id.php',
+                url: '../../service/match/get_last_sport_person_id.php',
                 type: 'GET',
                 dataType: 'json'
             });
         }
 
         function addData() {
-            // ป้องกันการ submit ซ้ำ
-            $('#addDataForm button[type="button"]').prop('disabled', true);
+            // ปรวจสอบข้อมูลที่จำเป็น
+            const matchName = $('#data_match').val().trim();
+            const personRed = $('#person_red').val().trim();
+            const personBlue = $('#person_blue').val().trim();
+            const matchType = $('#Match_Type').val();
 
-            // ตรวจสอบการเลือกประเภทมวย
-            if (!$('#Match_Type').val()) {
+            // สร้าง array เก็บข้อความ error
+            let errors = [];
+
+            if (!matchName) {
+                errors.push('กรุณากรอกชื่อแมตช์');
+            }
+            if (!personRed) {
+                errors.push('กรุณากรอกชื่อนักมวยฝ่ายแดง');
+            }
+            if (!personBlue) {
+                errors.push('กรุณากรอกชื่อนักมวยฝ่ายน้ำเงิน');
+            }
+            if (!matchType) {
+                errors.push('กรุณาเลือกประเภทมวย');
+            }
+
+            // ถ้ามี error แสดงข้อความแจ้งเตือน
+            if (errors.length > 0) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'กรุณาเลือกประเภทมวย',
-                    text: 'โปรดเลือกประเภทมวยก่อนบันทึกข้อมูล',
+                    title: 'กรุณากรอกข้อมูลให้ครบถ้วน',
+                    html: errors.join('<br>'),
                     confirmButtonText: 'ตกลง'
                 });
-                $('#addDataForm button[type="button"]').prop('disabled', false);
                 return false;
             }
 
-            // ตรวจสอบการกรอกชื่อแมตช์และชื่อนักมวย
-            // ... (โค้ดตรวจสอบอื่นๆ คงเดิม) ...
+            // ป้องกันการ submit ซ้ำ
+            $('#addDataForm button[type="button"]').prop('disabled', true);
 
-            // ดึงเลขลำดับล่าสุดก่อนบันทึก
+            // ตึงเลขลำดับล่าสุดก่อนบันทึก
             getLastSportPersonId().then(function(response) {
-                const lastNumber = response.last_number || 0;
-                const newNumber = lastNumber + 1;
-                const sportPersonId = 'SP-' + String(newNumber).padStart(5, '0'); // เช่น SP-00001
+                const newNumber = response.last_number + 1;
 
                 // สร้าง FormData object
                 const formData = new FormData();
                 
                 // เพิ่มข้อมูลเข้า FormData
-                formData.append('Match_Name', $('#Match_Name').val());
-                formData.append('Match_Type', $('#Match_Type').val());
-                formData.append('person_red', $('#person_red').val());
-                formData.append('person_blue', $('#person_blue').val());
-                formData.append('sport_person_id', sportPersonId);
+                formData.append('data_match', matchName);
+                formData.append('Match_Type', matchType);
+                formData.append('person_red', personRed);
+                formData.append('person_blue', personBlue);
+                formData.append('sport_person_id', newNumber);
 
                 // เพิ่มไฟล์รูปภาพ (ถ้ามี)
                 const imageRed = $('#inputImageRed')[0].files[0];
@@ -304,41 +326,38 @@
 
                 // ส่งข้อมูลไปยัง PHP
                 $.ajax({
-                    url: 'save_match.php',
+                    url: '../../service/match/save_match.php',
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
+                    dataType: 'json',
                     success: function(response) {
                         $('#addDataForm button[type="button"]').prop('disabled', false);
-                        try {
-                            const result = JSON.parse(response);
-                            if (result.status === 'success') {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'บันทึกสำเร็จ',
-                                    text: 'ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว',
-                                    confirmButtonText: 'ตกลง'
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        // ล้างฟอร์มและรีเฟรชตาราง
-                                        $('#person_red').val('');
-                                        $('#person_blue').val('');
-                                        $('.custom-file-label').html('เลือกไฟล์');
-                                        $('#inputImageRed').val('');
-                                        $('#inputImageBlue').val('');
-                                        refreshTable();
-                                    }
-                                });
-                            } else {
-                                throw new Error(result.message || 'ไม่สามารถบันทึกข้อมูลได้');
-                            }
-                        } catch (e) {
-                            console.error('Error parsing response:', e);
+                        
+                        // ไม่ต้อง parse JSON อีกเพราะ jQuery จะทำให้อัตโนมัติ
+                        if (response.status === 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'บันทึกสำเร็จ',
+                                text: 'ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว',
+                                confirmButtonText: 'ตกลง'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // ล้างฟอร์มและรีเฟรชตาราง
+                                    $('#person_red').val('');
+                                    $('#person_blue').val('');
+                                    $('.custom-file-label').html('เลือกไฟล์');
+                                    $('#inputImageRed').val('');
+                                    $('#inputImageBlue').val('');
+                                    refreshTable();
+                                }
+                            });
+                        } else {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'เกิดข้อผิดพลาด',
-                                text: 'ไม่สามารถบันทึกได้',
+                                text: response.message || 'ไม่สามารถบันทึกข้อมูลได้',
                                 confirmButtonText: 'ตกลง'
                             });
                         }
@@ -346,10 +365,11 @@
                     error: function(xhr, status, error) {
                         $('#addDataForm button[type="button"]').prop('disabled', false);
                         console.error('AJAX Error:', error);
+                        console.error('Server Response:', xhr.responseText);
                         Swal.fire({
                             icon: 'error',
                             title: 'เกิดข้อผิดพลาด',
-                            text: 'ไม่สา���ารถเชื่่อมต่อกับเซิร์ฟเวอร์',
+                            text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์',
                             confirmButtonText: 'ตกลง'
                         });
                     }
@@ -377,7 +397,7 @@
         function clearAllData() {
             Swal.fire({
                 title: 'ยืนยันการลบข้อมูล',
-                text: "คุณต้องการลบข้อมูลทั���งหมดใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้",
+                text: "คุณต้องการลบข้อมูลทั้งหมดใช่หรือไม่?",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
@@ -386,51 +406,46 @@
                 cancelButtonText: 'ยกเลิก'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // ส่ง request ไปลบข้อมูลทั้งหมด
+                    // แสดง loading
+                    Swal.fire({
+                        title: 'กำลังดำเนินการ...',
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false
+                    });
+
+                    // ส่ง request แบบ POST
                     $.ajax({
-                        url: 'delete_all_matches.php',
-                        type: 'POST',
+                        url: '../../service/match/delete_all_matches.php',
+                        method: 'POST',
                         dataType: 'json',
                         success: function(response) {
                             if (response.status === 'success') {
-                                // ล้างค่าในฟอร์ม
-                                $('#person_red').val('');
-                                $('#person_blue').val('');
-                                $('#Match_Type').val('');
-                                $('#Match_Name').val('');
-                                $('#dropdownMatchType').text('เลือกประเภทมวย');
-                                $('.dropdown-item').removeClass('active');
-                                $('.custom-file-label').html('เลือกไฟล์');
-                                $('#inputImageRed').val('');
-                                $('#inputImageBlue').val('');
-                                
-                                // ล้างค่าใน localStorage
-                                localStorage.removeItem('selectedMatchType');
-                                
-                                // รีเฟรชตาราง
-                                $('#matchDataTable').DataTable().ajax.reload();
-                                
-                                // แสดงข้อความสำเร็จ
-                                Swal.fire(
-                                    'ลบสำเร็จ!',
-                                    'ข้อมูลทั้งหมดถูกลบเรียบร้อยแล้ว',
-                                    'success'
-                                );
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'สำเร็จ!',
+                                    text: response.message
+                                }).then(() => {
+                                    location.reload(); // รีเฟรชหน้าเว็บ
+                                });
                             } else {
-                                Swal.fire(
-                                    'เกิดข้อผิดพลาด!',
-                                    response.message || 'ไม่สามารถลบข้อมูลได้',
-                                    'error'
-                                );
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'เกิดข้อผิดพลาด!',
+                                    text: response.message
+                                });
                             }
                         },
                         error: function(xhr, status, error) {
                             console.error('Error:', error);
-                            Swal.fire(
-                                'เกิดข้อผิดพลาด!',
-                                'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้',
-                                'error'
-                            );
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด!',
+                                text: 'ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้'
+                            });
                         }
                     });
                 }
@@ -458,9 +473,16 @@
             // Initialize DataTable
             var table = $('#matchDataTable').DataTable({
                 "processing": true,
+                "serverSide": false,
                 "ajax": {
-                    "url": "get_match_data.php",
-                    "dataSrc": "data"
+                    "url": "../../service/match/get_match_data.php",
+                    "type": "POST",
+                    "dataSrc": function(json) {
+                        if (!json.data) {
+                            return [];
+                        }
+                        return json.data;
+                    }
                 },
                 "columns": [
                     { 
@@ -492,16 +514,12 @@
                     {
                         "data": "isActive",
                         "render": function(data, type, row) {
-                            // ตรวจสอบค่าและแปลงเป็น boolean อย่างเข้มงวด
                             const isActive = (data === '1' || data === 1 || data === true);
-                            console.log('isActive value from DB:', data, 'converted to:', isActive); // Debug log
-                            
                             return `<div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input status-toggle" 
                                     id="statusSwitch${row.id}" 
                                     ${isActive ? 'checked' : ''} 
-                                    data-id="${row.id}"
-                                    data-current-status="${isActive ? '1' : '0'}">
+                                    data-id="${row.id}">
                                 <label class="custom-control-label" for="statusSwitch${row.id}"></label>
                             </div>`;
                         }
@@ -529,13 +547,24 @@
                     "search": "ค้นหา:",
                     "paginate": {
                         "first": "หน้าแรก",
-                        "last": "หน้าสุข้าย",
+                        "last": "หน้าสุขท้าย",
                         "next": "ถัดไป",
                         "previous": "ก่อนหน้า"
-                    }
+                    },
+                    "loadingRecords": "กำลังโหลด...",
+                    "processing": "กำลังประมวลผล..."
                 },
-                "order": [[0, 'asc']]
+                "order": [[0, 'asc']],
+                "pageLength": 10,
+                "searching": true,
+                "ordering": true,
+                "responsive": true
             });
+
+            // Refresh function
+            window.refreshTable = function() {
+                table.ajax.reload(null, false);
+            };
 
             // Handle Edit Button Click
             $('#matchDataTable').on('click', '.edit-btn', function() {
@@ -547,7 +576,7 @@
                 var image_blue = row.find('td:eq(4) img').attr('src') || '';
                 
                 Swal.fire({
-                    title: 'แก้ไขข้อมูล',
+                    title: 'แกก้ไขข้อมูล',
                     html: `
                         <form id="editForm">
                             <div class="row">
@@ -634,7 +663,7 @@
                         if (imageBlue) formData.append('image_blue', imageBlue);
 
                         return $.ajax({
-                            url: 'update_match.php',
+                            url: '../../service/match/update_match.php',
                             type: 'POST',
                             data: formData,
                             processData: false,
@@ -686,7 +715,7 @@
                     if (result.isConfirmed) {
                         // เพิ่มโค้ดสำหรับการลบข้อมูล
                         $.ajax({
-                            url: 'delete_match.php',
+                            url: '../../service/match/delete_match.php',
                             type: 'POST',
                             data: { id: id },
                             success: function(response) {
@@ -715,12 +744,13 @@
                 });
             });
 
-            // จัดการปุ่มบันทึกและแก้ไขชื่อแม���ช์
-            $('#editMatchNameButton').hide();
+            // จัดการปุ่มบันทึกและแก้ไขชื่อแมตช์
+            $('#lockMatchNameButton').prop('disabled', false);
+            $('#editMatchNameButton').prop('disabled', true);
 
             // เมื่อกดปุ่มบันทึกชื่อแมตช์
             $('#lockMatchNameButton').click(function() {
-                const matchName = $('#Match_Name').val();
+                const matchName = $('#data_match').val();
                 if (!matchName) {
                     Swal.fire({
                         icon: 'error',
@@ -732,25 +762,25 @@
                 }
 
                 // ล็อคการแก้ไข
-                $('#Match_Name').prop('readonly', true);
+                $('#data_match').prop('readonly', true);
                 // เปลี่ยนสีพื้นหลังให้เห็นว่าถูกล็อค
-                $('#Match_Name').css('background-color', '#e9ecef');
-                // ซ่อนปุ่มบันทึกและแสดงปุ่มแก้ไข
-                $('#lockMatchNameButton').hide();
-                $('#editMatchNameButton').show();
+                $('#data_match').css('background-color', '#e9ecef');
+                // ซลับสถะปุ่ม
+                $('#lockMatchNameButton').prop('disabled', true);
+                $('#editMatchNameButton').prop('disabled', false);
             });
 
             // เมื่อกดปุ่มแก้ไขชื่อแมตช์
             $('#editMatchNameButton').click(function() {
                 // ปลดล็อคการแก้ไข
-                $('#Match_Name').prop('readonly', false);
+                $('#data_match').prop('readonly', false);
                 // เปลี่ยนสีพื้นหลังกลับเป็นปกติ
-                $('#Match_Name').css('background-color', '#fff');
-                // ซ่อนปุ่มแก้ไขและแสดงปุ่มบันทึก
-                $('#editMatchNameButton').hide();
-                $('#lockMatchNameButton').show();
+                $('#data_match').css('background-color', '#fff');
+                // ซ๪ลับสถะปุ่ม
+                $('#editMatchNameButton').prop('disabled', true);
+                $('#lockMatchNameButton').prop('disabled', false);
                 // โฟัสที่ช่องกรอกข้อมูล
-                $('#Match_Name').focus();
+                $('#data_match').focus();
             });
 
             // เพิ่ม event handler สำหรับ toggle switch
@@ -766,7 +796,7 @@
                 console.log('Updating status:', { id, newStatus }); // Debug log
                 
                 $.ajax({
-                    url: 'update_status.php',
+                    url: '../../service/match/update_status.php',
                     type: 'POST',
                     data: {
                         id: id,
@@ -781,7 +811,7 @@
                         toggleElement.data('current-status', newStatus);
                         toastr.success(response.message);
                     } else {
-                        // ถ้าไม่สำเร็จให้กลับ���ปค่าเดิม
+                        // ถ้าไม่สำเร็จให้กลับไปค่าเดิม
                         toggleElement.prop('checked', !toggleElement.prop('checked'));
                         toastr.error(response.message);
                     }

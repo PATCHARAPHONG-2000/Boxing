@@ -62,12 +62,9 @@
             /* ปรับขนาดฟอนต์ตามขนาดหน้าจอ */
         }
 
-        .match-item span:nth-child(3) {
-            font-size: 2.5rem;
+        .match-item span {
+            font-size: 4rem;
             font-weight: 900;
-            background: linear-gradient(to right, red 50%, blue 50%);
-            background-clip: text;
-            color: transparent;
         }
 
         .text-vs {
@@ -271,8 +268,8 @@
                                                         <label class="text-white" for="Score_JR2">SUM JUDGE 2</label>
                                                         <input type="number" class="form-control mb-4" id="Score_JR2" name="Score_JR2"
                                                             placeholder="สรุปคะแนน" disabled>
-                                                        <label class="text-white" lable="judge">SUMJUDGE 3</label>
-                                                        <input type="number" class="form-control mb-4"
+                                                        <label class="text-white" for="Score_JR3">SUM JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-4" id="Score_JR3" name="Score_JR3"
                                                             placeholder="สรุปคะแนน" disabled>
                                                     </div>
                                                     <div class="blue-side col-6">
@@ -343,373 +340,10 @@
     </script>
 
     <script>
-        const saveButtons = document.querySelectorAll('.btn-save');
-
-        saveButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Show SweetAlert2 popup
-                Swal.fire({
-                    icon: 'success',
-                    title: 'บันทึกแล้ว',
-                    text: 'ข้อมูลถูกบันทึกสำเร็จ',
-                    confirmButtonText: 'ตกลง'
-                });
-            });
-        });
-    </script>
-    <script>
-        // Function to toggle dropdown visibility
-        function toggleDropdown() {
-            var dropdownMenu = document.getElementById('dropdownMenuButton');
-            var isExpanded = dropdownMenu.getAttribute('aria-expanded') === 'true';
-            dropdownMenu.setAttribute('aria-expanded', !isExpanded);
-
-            // Optionally toggle class 'show' for Bootstrap behavior (to keep dropdown open manually)
-            var dropdownMenuElement = document.querySelector('.dropdown-menu');
-            if (isExpanded) {
-                dropdownMenuElement.classList.remove('show'); // Close it if open
-            } else {
-                dropdownMenuElement.classList.add('show'); // Open it if closed
-            }
-        }
-
-        // Function that sets the selected value and keeps the dropdown open
-        function selectBoxingMatch(match) {
-            console.log("Selected match:", match); // Optionally log the selection
-
-            // You could also update the button text to reflect the selected match
-            document.getElementById('dropdownMenuButton').innerText = match.name_match || 'Selected Match';
-
-            // Trigger the dropdown toggle to keep the dropdown open or perform custom behavior
-            toggleDropdown();  // Call the function to toggle dropdown visibility (open/close)
-        }
-
-        function calculateTotalScores() {
-            if (!selectedMatchId) return;
-
-            // ดึงข้อมูลคะแนนที่บันทึกแล้วจากเซิร์ฟเวอร์
-            fetch(`../../service/get_total_scores.php?id=${selectedMatchId}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.error) {
-                        throw new Error(data.message);
-                    }
-
-                    // อัพเดทช่องสรุปคะแนน
-                    const summaryCard = $('.round-card:has(h1:contains("สรุปคะแนน"))');
-                    const redSummaryInputs = summaryCard.find('.red-side input');
-                    const blueSummaryInputs = summaryCard.find('.blue-side input');
-
-                    // แสดงคะแนนรวมจากฐานข้อมูล
-                    $(redSummaryInputs[0]).val(data.scores.Score_JR1);
-                    $(redSummaryInputs[1]).val(data.scores.Score_JR2);
-                    $(redSummaryInputs[2]).val(data.scores.Score_JR3);
-                    $(blueSummaryInputs[0]).val(data.scores.Score_JB1);
-                    $(blueSummaryInputs[1]).val(data.scores.Score_JB2);
-                    $(blueSummaryInputs[2]).val(data.scores.Score_JB3);
-                })
-                .catch(error => {
-                    console.error('Error updating total scores:', error);
-                });
-        }
-
-        // แก้ไขการทำงานของปุ่มบันทึก
-        $('.btn-save').off('click').on('click', function() {
-            if (!selectedMatchId) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'กรุณาเลือกคู่มวย',
-                    text: 'โปรดเลือกคู่มวยก่อนบันทึกคะแนน'
-                });
-                return;
-            }
-
-            // หายกที่จากปุ่มที่กด
-            const roundCard = $(this).closest('.round-card');
-            const roundText = roundCard.find('h1.round').text();
-            const round = parseInt(roundText.replace(/\D/g, '')); 
-
-            if (isNaN(round)) {
-                return; // ไม่ทำงานถ้าเป็นการ์ดสรุปคะแนน
-            }
-
-            // สรวจสอบว่ากรอกคะแนนครบหรือไม่
-            const redInputs = roundCard.find('.red-side input');
-            const blueInputs = roundCard.find('.blue-side input');
-            let hasEmptyScore = false;
-
-            redInputs.each(function() {
-                if (!$(this).val()) hasEmptyScore = true;
-            });
-            blueInputs.each(function() {
-                if (!$(this).val()) hasEmptyScore = true;
-            });
-
-            if (hasEmptyScore) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'กรุณากรอกคะแนนให้ครบ',
-                    text: `กรุณากรอกคะแนนยกที่ ${round} ให้ครบทุกช่อง`
-                });
-                return;
-            }
-
-            // เก็บคะแนนเฉพาะยกที่กดบันทึก
-            const formData = new FormData();
-            formData.append('sport_person_id', selectedMatchId);
-            formData.append('round', round);
-
-            // ดึงค่าคะแนนจากฟอร์ม
-            formData.append('red_judge1', $(redInputs[0]).val());
-            formData.append('blue_judge1', $(blueInputs[0]).val());
-            formData.append('red_judge2', $(redInputs[1]).val());
-            formData.append('blue_judge2', $(blueInputs[1]).val());
-            formData.append('red_judge3', $(redInputs[2]).val());
-            formData.append('blue_judge3', $(blueInputs[2]).val());
-
-            // ส่งข้อมูลไปบันทึก
-            fetch('../../service/save_score.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.error) {
-                    throw new Error(result.message);
-                }
-                
-                Swal.fire({
-                    icon: 'success',
-                    title: 'บันทึกสำเร็จ',
-                    text: `บันทึกคะแนนยกที่ ${round} เรียบร้อยแล้ว`
-                });
-                
-                // อัพเดทคะแนนรวมหลังบันทึกสำเร็จ
-                calculateTotalScores();
-            })
-            .catch(error => {
-                console.error('Save error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด',
-                    text: error.message || 'ไม่สามารถบันทึกคะแนนได้ กรุณาลองใหม่อีกครั้ง'
-                });
-            });
-        });
-    </script>
-
-    <script>
-        // Function to load matches from database
-        function loadMatches() {
-            fetch('../../service/match.php')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(response => {
-                    const dropdownMenu = document.getElementById('matchDropdown');
-                    dropdownMenu.innerHTML = '';
-                    
-                    if (response.error) {
-                        throw new Error(response.message);
-                    }
-                    
-                    const matches = response.data || [];
-                    
-                    if (matches.length === 0) {
-                        dropdownMenu.innerHTML = `
-                            <a class="dropdown-item text-info">
-                                No matches available
-                            </a>`;
-                        return;
-                    }
-                    
-                    matches.forEach(match => {
-                        const item = document.createElement('a');
-                        item.className = 'dropdown-item';
-                        item.href = '#';
-                        item.textContent = match.name_match || 'Unnamed Match';
-                        item.onclick = (e) => {
-                            e.preventDefault();
-                            selectBoxingMatch(match);
-                        };
-                        dropdownMenu.appendChild(item);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error loading matches:', error);
-                    const dropdownMenu = document.getElementById('matchDropdown');
-                    dropdownMenu.innerHTML = `
-                        <a class="dropdown-item text-danger">
-                            Error loading matches. Please try again later.
-                        </a>`;
-                    
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error Loading Matches',
-                        text: error.message || 'Unable to load match data. Please check your connection and try again.',
-                        confirmButtonText: 'Retry',
-                        showCancelButton: true,
-                        cancelButtonText: 'Dismiss'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            loadMatches();
-                        }
-                    });
-                });
-        }
-
-        function selectBoxingMatch(match) {
-            if (!match) return;
-
-            // Update dropdown button text
-            document.getElementById('dropdownMenuButton').textContent = match.name_match || 'Selected Match';
-            
-            // Update match display
-            const matchContainer = document.getElementById('matchContainer');
-            matchContainer.innerHTML = `
-                <span class="text-danger">${match.person_red || 'Red Corner'}</span>
-                <span class="text-vs">VS</span>
-                <span class="text-primary">${match.person_blue || 'Blue Corner'}</span>
-            `;
-
-            // Close dropdown
-            const dropdownMenu = document.querySelector('.dropdown-menu');
-            dropdownMenu.classList.remove('show');
-        }
-
-        // Initialize on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            loadMatches();
-            
-            // Add click handler for dropdown button
-            document.getElementById('dropdownMenuButton').addEventListener('click', function() {
-                const dropdownMenu = document.querySelector('.dropdown-menu');
-                dropdownMenu.classList.toggle('show');
-            });
-
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function(e) {
-                if (!e.target.matches('.dropdown-toggle')) {
-                    const dropdowns = document.getElementsByClassName('dropdown-menu');
-                    Array.from(dropdowns).forEach(dropdown => {
-                        if (dropdown.classList.contains('show')) {
-                            dropdown.classList.remove('show');
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-
-    <script>
-        // เพิ่มตัวแปรสำหรับเก็บ match_id ที่เลือก
+        // ประกาศตัวแปร global
         let selectedMatchId = null;
 
-        function selectBoxingMatch(match) {
-            selectedMatchId = match.id; // เก็บ ID ของ match ที่เลือก
-            
-            // อัพเดทข้อความในปุ่ม dropdown
-            document.getElementById('dropdownMenuButton').textContent = match.name_match || 'Selected Match';
-            
-            // อัพเดทการแสดงผลคู่มวย
-            const matchContainer = document.getElementById('matchContainer');
-            matchContainer.innerHTML = `
-                <span class="text-danger">${match.person_red || 'Red Corner'}</span>
-                <span class="text-vs">VS</span>
-                <span class="text-primary">${match.person_blue || 'Blue Corner'}</span>
-            `;
-        }
-
-        // แก้ไขการทำงานของปุ่มบันทึก
-        $('.btn-save').off('click').on('click', function() {
-            if (!selectedMatchId) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'กรุณาเลือกคู่มวย',
-                    text: 'โปรดเลือกคู่มวยก่อนบันทึกคะแนน'
-                });
-                return;
-            }
-
-            // หายกที่จากปุ่มที่กด
-            const roundCard = $(this).closest('.round-card');
-            const roundText = roundCard.find('h1.round').text();
-            const round = parseInt(roundText.replace(/\D/g, '')); 
-
-            if (isNaN(round)) {
-                return; // ไม่ทำงานถ้าเป็นการ์ดสรุปคะแนน
-            }
-
-            // ตรวจสอบว่ากรอกคะแนนครบหรือไม่
-            const redInputs = roundCard.find('.red-side input');
-            const blueInputs = roundCard.find('.blue-side input');
-            let hasEmptyScore = false;
-
-            redInputs.each(function() {
-                if (!$(this).val()) hasEmptyScore = true;
-            });
-            blueInputs.each(function() {
-                if (!$(this).val()) hasEmptyScore = true;
-            });
-
-            if (hasEmptyScore) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'กรุณากรอกคะแนนให้ครบ',
-                    text: `กรุณากรอกคะแนนยกที่ ${round} ให้ครบทุกช่อง`
-                });
-                return;
-            }
-
-            // เก็บคะแนนเฉพาะยกที่กดบันทึก
-            const formData = new FormData();
-            formData.append('sport_person_id', selectedMatchId);
-            formData.append('round', round);
-
-            // ดึงค่าคะแนนจากฟอร์ม
-            formData.append('red_judge1', $(redInputs[0]).val());
-            formData.append('blue_judge1', $(blueInputs[0]).val());
-            formData.append('red_judge2', $(redInputs[1]).val());
-            formData.append('blue_judge2', $(blueInputs[1]).val());
-            formData.append('red_judge3', $(redInputs[2]).val());
-            formData.append('blue_judge3', $(blueInputs[2]).val());
-
-            // ส่งข้อมูลไปบันทึก
-            fetch('../../service/save_score.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(result => {
-                if (result.error) {
-                    throw new Error(result.message);
-                }
-                
-                Swal.fire({
-                    icon: 'success',
-                    title: 'บันทึกสำเร็จ',
-                    text: `บันทึกคะแนนยกที่ ${round} เรียบร้อยแล้ว`
-                });
-                
-                // อัพเดทคะแนนรวมหลังบันทึกสำเร็จ
-                calculateTotalScores();
-            })
-            .catch(error => {
-                console.error('Save error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด',
-                    text: error.message || 'ไม่สามารถบันทึกคะแนนได้ กรุณาลองใหม่อีกครั้ง'
-                });
-            });
-        });
-    </script>
-
-    <script>
-        // Function to load matches from database
+        // Function to load matches
         function loadMatches() {
             fetch('../../service/match.php')
                 .then(response => {
@@ -719,54 +353,427 @@
                     return response.text();
                 })
                 .then(text => {
+                    console.log('Raw response:', text);
                     try {
-                        const matches = JSON.parse(text);
+                        const data = JSON.parse(text);
                         const dropdownMenu = document.getElementById('matchDropdown');
                         dropdownMenu.innerHTML = '';
-                        
-                        if (Array.isArray(matches)) {
-                            matches.forEach(match => {
+
+                        if (!Array.isArray(data) || data.length === 0) {
+                            dropdownMenu.innerHTML = '<a class="dropdown-item">ไม่พบข้อมูลคู่มวย</a>';
+                            return;
+                        }
+
+                        data.forEach(match => {
+                            if (match && match.sport_person_id && match.person_red && match.person_blue) {
                                 const item = document.createElement('a');
                                 item.className = 'dropdown-item';
                                 item.href = '#';
-                                item.textContent = match.name_match;
+                                item.textContent = `${match.person_red} VS ${match.person_blue}`;
                                 item.onclick = (e) => {
                                     e.preventDefault();
-                                    selectBoxingMatch(match);  // ส่งข้อมูล match ทั้งหมด
+                                    selectBoxingMatch(match);
                                 };
                                 dropdownMenu.appendChild(item);
-                            });
-                        }
+                            }
+                        });
                     } catch (e) {
-                        console.error('JSON parsing error:', e);
+                        console.error('JSON parse error:', e, 'Response:', text);
+                        throw new Error('Invalid JSON response from server');
                     }
                 })
                 .catch(error => {
                     console.error('Error loading matches:', error);
                     const dropdownMenu = document.getElementById('matchDropdown');
-                    dropdownMenu.innerHTML = '<span class="dropdown-item text-danger">Error loading matches</span>';
+                    dropdownMenu.innerHTML = '<a class="dropdown-item text-danger">เกิดข้อผิดพลาดในการโหลดข้อมูล</a>';
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ไม่สามารถโหลดข้อมูลได้',
+                        text: 'กรุณาลองใหม่อีกครั้ง'
+                    });
                 });
         }
 
+        // Function to select boxing match
         function selectBoxingMatch(match) {
-            // อัพเดทขื่อแมตช์ที่เลือก
-            document.getElementById('dropdownMenuButton').textContent = match.name_match;
+            console.log('Selected match:', match); // Debug log
+
+            if (!match || !match.sport_person_id || !match.person_red || !match.person_blue) {
+                console.error('Invalid match data:', match);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ข้อมิดพลาด',
+                    text: 'ข้อมูลการแข่งขันไม่ถูกต้อง'
+                });
+                return;
+            }
+
+            // อัพเดทการแสดงผลในปุ่ม dropdown ให้แสดงชื่อนักมวยทั้งคู่
+            document.getElementById('dropdownMenuButton').textContent = `${match.person_red} VS ${match.person_blue}`;
             
-            // แสดงชื่อนักมวย
             const matchContainer = document.getElementById('matchContainer');
             matchContainer.innerHTML = `
                 <span class="text-danger">${match.person_red}</span>
                 <span class="text-vs">VS</span>
                 <span class="text-primary">${match.person_blue}</span>
             `;
-            
-            // เคลียร์คะแนนเก่า
+
+            // เก็บค่า sport_person_id
+            selectedMatchId = match.sport_person_id;
+
+            // เคลียร์และโหลดคะแนน
             clearAllScores();
+            loadExistingScores(selectedMatchId);
         }
 
-        document.addEventListener('DOMContentLoaded', loadMatches);
-    </script>
+        // Function to clear all scores
+        function clearAllScores() {
+            // ยกที่ 1-5
+            for (let round = 1; round <= 5; round++) {
+                // ฝั่งแดง
+                document.getElementById(`R${round}_JR1`).value = '';
+                document.getElementById(`R${round}_JR2`).value = '';
+                document.getElementById(`R${round}_JR3`).value = '';
+                
+                // ฝั่งน้ำเงิน
+                document.getElementById(`R${round}_JB1`).value = '';
+                document.getElementById(`R${round}_JB2`).value = '';
+                document.getElementById(`R${round}_JB3`).value = '';
+            }
 
+            // เคลียร์คะแนนรวม
+            for (let judge = 1; judge <= 3; judge++) {
+                document.getElementById(`Score_JR${judge}`).value = '';
+                document.getElementById(`Score_JB${judge}`).value = '';
+            }
+        }
+
+        // Function to load existing scores
+        function loadExistingScores(sport_person_id) {
+            if (!sport_person_id) {
+                console.error('No sport_person_id provided');
+                return;
+            }
+
+            console.log('Loading scores for:', sport_person_id);
+
+            fetch('../../service/get_scores.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `sport_person_id=${encodeURIComponent(sport_person_id)}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Received score data:', data);
+
+                if (data.status === 'error') {
+                    throw new Error(data.message);
+                }
+
+                if (!data || !data.scores) {
+                    console.log('No existing scores found');
+                    clearAllScores();
+                    return;
+                }
+
+                const scores = data.scores;
+                
+                // ยกที่ 1-5
+                for (let round = 1; round <= 5; round++) {
+                    // ฝั่งแดง
+                    document.getElementById(`R${round}_JR1`).value = scores[`R${round}_JR1`] !== null ? scores[`R${round}_JR1`] : '';
+                    document.getElementById(`R${round}_JR2`).value = scores[`R${round}_JR2`] !== null ? scores[`R${round}_JR2`] : '';
+                    document.getElementById(`R${round}_JR3`).value = scores[`R${round}_JR3`] !== null ? scores[`R${round}_JR3`] : '';
+                    
+                    // ฝั่งน้ำเงิน
+                    document.getElementById(`R${round}_JB1`).value = scores[`R${round}_JB1`] !== null ? scores[`R${round}_JB1`] : '';
+                    document.getElementById(`R${round}_JB2`).value = scores[`R${round}_JB2`] !== null ? scores[`R${round}_JB2`] : '';
+                    document.getElementById(`R${round}_JB3`).value = scores[`R${round}_JB3`] !== null ? scores[`R${round}_JB3`] : '';
+                }
+
+                // คำนวณคะแนนรวม
+                calculateTotalScores();
+            })
+            .catch(error => {
+                console.error('Error loading scores:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'ไม่สามารถโหลดคะแนนได้',
+                    text: 'กรุณาลองใหม่อีกครั้ง'
+                });
+            });
+        }
+
+        // Function to fill score form
+        function fillScoreForm(scores) {
+            for (let round = 1; round <= 5; round++) {
+                for (let judge = 1; judge <= 3; judge++) {
+                    const redInput = document.getElementById(`R${round}_JR${judge}`);
+                    const blueInput = document.getElementById(`R${round}_JB${judge}`);
+                    if (redInput && scores[`R${round}_JR${judge}`]) {
+                        redInput.value = scores[`R${round}_JR${judge}`];
+                    }
+                    if (blueInput && scores[`R${round}_JB${judge}`]) {
+                        blueInput.value = scores[`R${round}_JB${judge}`];
+                    }
+                }
+            }
+            // Calculate totals after filling scores
+            calculateTotalScores();
+        }
+
+        // Add new function to calculate total scores
+        function calculateTotalScores() {
+            if (!selectedMatchId) {
+                console.warn('No match selected');
+                return;
+            }
+
+            // Debug log
+            console.log('Calculating scores for match ID:', selectedMatchId);
+
+            // สร้าง FormData object
+            const formData = new FormData();
+            formData.append('sport_person_id', selectedMatchId);
+
+            // คำนวณคะแนนรวมสำหรับแต่ละกรรมการ
+            for (let judge = 1; judge <= 3; judge++) {
+                let redTotal = 0;
+                let blueTotal = 0;
+                
+                // รวมคะแนนจากทุกยก
+                for (let round = 1; round <= 5; round++) {
+                    const redScore = parseFloat(document.getElementById(`R${round}_JR${judge}`).value) || 0;    
+                    const blueScore = parseFloat(document.getElementById(`R${round}_JB${judge}`).value) || 0;
+                    redTotal += redScore;
+                    blueTotal += blueScore;
+                }
+                
+                // เพิ่มคะแนนลงใน FormData
+                formData.append(`Score_JR${judge}`, redTotal);
+                formData.append(`Score_JB${judge}`, blueTotal);
+                
+                // อัพเดท UI
+                document.getElementById(`Score_JR${judge}`).value = redTotal;
+                document.getElementById(`Score_JB${judge}`).value = blueTotal;
+
+                // Debug log
+                console.log(`Judge ${judge} Totals:`, { red: redTotal, blue: blueTotal });
+            }
+
+            // ส่งข้อมูลไปยัง server
+            fetch('../../service/save_total_scores.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(async response => {
+                const text = await response.text(); // อ่าน response เป็น text ก่อน
+                console.log('Raw response:', text); // Debug log
+
+                try {
+                    const data = JSON.parse(text); // แปลงเป็น JSON
+                    if (!response.ok) {
+                        throw new Error(data.message || `HTTP error! status: ${response.status}`);
+                    }
+                    return data;
+                } catch (e) {
+                    throw new Error(`Parse error: ${e.message}\nRaw response: ${text}`);
+                }
+            })
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Total scores saved successfully');
+                } else {
+                    throw new Error(data.message || 'Failed to save total scores');
+                }
+            })
+            .catch(error => {
+                console.error('Error saving total scores:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถบันทึกคะแนนรวมได้ กรุณาลองใหม่อีกครั้ง'
+                });
+            });
+        }
+
+        // Event listener for save buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load matches when page loads
+            loadMatches();
+
+            // Add click handlers for save buttons
+            document.querySelectorAll('.btn-save').forEach(button => {
+                button.addEventListener('click', async function() {
+                    if (!selectedMatchId) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'กรุณาเลือกคู่มวย',
+                            text: 'โปรดเลือกคู่มวยก่อนบันทึกคะแนน'
+                        });
+                        return;
+                    }
+
+                    // Debug log
+                    console.log('Current selectedMatchId:', selectedMatchId);
+
+                    const roundCard = this.closest('.round-card');
+                    const roundText = roundCard.querySelector('h1.round').textContent;
+                    const round = parseInt(roundText.replace(/\D/g, ''));
+
+                    if (isNaN(round)) {
+                        console.error('Invalid round number');
+                        return;
+                    }
+
+                    try {
+                        const redScores = Array.from(roundCard.querySelectorAll('.red-side input')).map(input => input.value);
+                        const blueScores = Array.from(roundCard.querySelectorAll('.blue-side input')).map(input => input.value);
+
+                        // Debug log before saving
+                        console.log('Attempting to save scores:', {
+                            matchId: selectedMatchId,
+                            round: round,
+                            redScores: redScores,
+                            blueScores: blueScores
+                        });
+
+                        await saveRoundScores(selectedMatchId, round, redScores, blueScores);
+
+                        calculateTotalScores();
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'บันทึกสำเร็จ',
+                            text: `บันทึกคะแนนยกที่ ${round} เรียบร้อยแล้ว`
+                        });
+
+                    } catch (error) {
+                        console.error('Save error:', error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'ไม่สามารถบันทึกคะแนนได้ กรุณาลองใหม่อีกครั้ง'
+                        });
+                    }
+                });
+            });
+
+            // Add input event listeners to all score inputs
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                if (input.id.startsWith('R') && !input.id.startsWith('Score')) {
+                    input.addEventListener('input', calculateTotalScores);
+                }
+            });
+        });
+
+        // Function to save scores for a specific round
+        async function saveRoundScores(matchId, round, redScores, blueScores) {
+            try {
+                // Debug log ก่อนส่งข้อมูล
+                console.log('Saving scores for:', {
+                    sport_person_id: matchId,
+                    round: round,
+                    redScores: redScores,
+                    blueScores: blueScores
+                });
+
+                const formData = new FormData();
+                formData.append('sport_person_id', matchId);
+                formData.append('round', round);
+                
+                // Add red corner scores
+                formData.append('red_judge1', redScores[0]);
+                formData.append('red_judge2', redScores[1]);
+                formData.append('red_judge3', redScores[2]);
+                
+                // Add blue corner scores
+                formData.append('blue_judge1', blueScores[0]);
+                formData.append('blue_judge2', blueScores[1]);
+                formData.append('blue_judge3', blueScores[2]);
+
+                const response = await fetch('../../service/save_score.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+                
+                // Debug log หลังได้รับผลลัพธ์
+                console.log('Save result:', result);
+                
+                if (result.error) {
+                    throw new Error(result.message);
+                }
+
+                return result;
+            } catch (error) {
+                console.error('Error saving scores:', error);
+                throw error;
+            }
+        }
+
+        function saveScores(round) {
+            if (!selectedMatchId) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'กรุณาเลือกคู่มวย',
+                    text: 'โปรดเลือกคู่มวยก่อนบันทึกคะแนน'
+                });
+                return;
+            }
+
+            // เก็บค่าคะแนนจากฟอร์ม
+            const scores = {
+                sport_person_id: selectedMatchId,
+                round: round,
+                red_judge1: document.getElementById(`R${round}_JR1`).value || 0,
+                red_judge2: document.getElementById(`R${round}_JR2`).value || 0,
+                red_judge3: document.getElementById(`R${round}_JR3`).value || 0,
+                blue_judge1: document.getElementById(`R${round}_JB1`).value || 0,
+                blue_judge2: document.getElementById(`R${round}_JB2`).value || 0,
+                blue_judge3: document.getElementById(`R${round}_JB3`).value || 0
+            };
+
+            // แปลงข้อมูลเป็น URL-encoded string
+            const formData = new URLSearchParams();
+            for (const [key, value] of Object.entries(scores)) {
+                formData.append(key, value);
+            }
+
+            // ส่งข้อมูลไปยัง server
+            fetch('../../service/save_score.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: formData.toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'บันทึกสำเร็จ',
+                        text: 'บันทึกคะแนนเรียบร้อยแล้ว'
+                    });
+                } else {
+                    throw new Error(data.message || 'เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+                }
+            })
+            .catch(error => {
+                console.error('Error saving scores:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: error.message || 'ไม่สามารถบันทึกคะแนนได้ กรุณาลองใหม่อีกครั้ง'
+                });
+            });
+        }
+    </script>
 
 </body>
 

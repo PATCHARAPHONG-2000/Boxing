@@ -20,41 +20,39 @@
     <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
 
     <style>
-        .round-card:nth-child(1) {
-            margin-bottom: 30px;
+        /* ปรับพื้นหลังและระยะห่างให้ตรงกับยกที่ 1-5 */
+        .round-card {
+            background: linear-gradient(to right, red 50%, blue 50%);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            /* ระยะห่างระหว่างรอบ */
+            padding: 15px;
+            /* เพิ่มการ padding เพื่อให้พื้นที่ดูสมดุล */
+            position: relative;
         }
 
-        #successAlert {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 9999;
-            display: none;
+        .round {
+            background-color: transparent;
         }
 
-        .edit-icon {
-            position: absolute;
-            top: 7px;
-            right: 15px;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: #ffffff;
+        .card-body {
+            padding-top: 1;
+            /* ลบ padding บน */
         }
 
-        .bg-danger {
-            background-color: red !important;
+        .col-md-4 {
+            margin-bottom: 20px;
+            /* เพิ่มระยะห่างระหว่างคอลัมน์ */
         }
 
-        .bg-primary {
-            background-color: blue !important;
+        /* เพิ่มการกำหนดความสูงของแต่ละรอบ */
+        .round-card .round {
+            height: 100%;
         }
 
-        .modal-body .form-group label {
-            font-weight: bold;
-        }
-
-        .modal-body input {
-            background-color: rgba(255, 255, 255, 0.8);
+        /* ปรับขนาดของปุ่มให้เหมาะสม */
+        .btn-save {
+            width: 120px;
         }
 
         /* ส่วนของ card-header ห้ามแก้ ลบ เพิ่ม */
@@ -70,12 +68,9 @@
             /* ปรับขนาดฟอนต์ตามขนาดหน้าจอ */
         }
 
-        .match-item span:nth-child(3) {
-            font-size: 2.5rem;
+        .match-item span {
+            font-size: 4rem;
             font-weight: 900;
-            background: linear-gradient(to right, red 50%, blue 50%);
-            background-clip: text;
-            color: transparent;
         }
 
         .text-vs {
@@ -85,6 +80,27 @@
             background: linear-gradient(to right, red 50%, blue 50%);
             background-clip: text;
             color: transparent;
+        }
+
+        .edit-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .btn-save.btn-secondary {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-save.btn-warning {
+            opacity: 1;
+            cursor: pointer;
         }
     </style>
 
@@ -103,262 +119,218 @@
                                     <div class="d-flex justify-content-center align-items-center">
 
                                         <div class="dropdown">
-                                            <h2>
-                                                ยืนยันคะแนน
-                                            </h2>
+                                            <h2>ยืนยันคะแนน</h2>
                                             <button class="btn btn-danger dropdown-toggle" type="button"
                                                 id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                                 aria-expanded="false">
                                                 เลือกยกที่
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="#" data-round="1">1</a>
-                                                <a class="dropdown-item" href="#" data-round="2">2</a>
-                                                <a class="dropdown-item" href="#" data-round="3">3</a>
-                                                <a class="dropdown-item" href="#" data-round="4">4</a>
-                                                <a class="dropdown-item" href="#" data-round="5">5</a>
+                                                <a class="dropdown-item" href="#" onclick="updateRound(1); return false;">1</a>
+                                                <a class="dropdown-item" href="#" onclick="updateRound(2); return false;">2</a>
+                                                <a class="dropdown-item" href="#" onclick="updateRound(3); return false;">3</a>
+                                                <a class="dropdown-item" href="#" onclick="updateRound(4); return false;">4</a>
+                                                <a class="dropdown-item" href="#" onclick="updateRound(5); return false;">5</a>
                                             </div>
                                         </div>
                                         <div class="flex-grow-1">
                                             <p class="text-center match-item" id="matchContainer">
-                                                <!-- Remove the hardcoded example -->
+                                                <!-- Data will be populated dynamically -->
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
-                                        <!-- ยกที่1 -->
+                                        <!-- ยกที่ 1 -->
                                         <div class="col-md-4">
-                                            <div class="round-card p-3 round1"
-                                                style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
-                                                    <div class="edit-icon">
-                                                        <i class="fa-regular fa-pen-to-square fa-xl"></i>
-                                                    </div>
-                                                </a>
+                                            <div class="round-card p-3">
+                                                <button class="edit-button">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
                                                 <h1 class="round text-center text-white">ยกที่ 1</h1>
                                                 <div class="row">
-                                                    <div class="red-side col-6 ">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
+                                                    <div class="red-side col-6">
+                                                        <label class="text-white" for="R1_JR1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R1_JR1" name="R1_JR1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R1_JR2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R1_JR2" name="R1_JR2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R1_JR3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R1_JR3" name="R1_JR3" placeholder="กรอกคะแนน" disabled>
                                                     </div>
                                                     <div class="blue-side col-6">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะ��นน"
-                                                            class="form-control mb-2" disabled>
+                                                        <label class="text-white" for="R1_JB1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R1_JB1" name="R1_JB1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R1_JB2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R1_JB2" name="R1_JB2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R1_JB3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R1_JB3" name="R1_JB3" placeholder="กรอกคะแนน" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-3">
-                                                    <button class="btn btn-warning btn-save"
-                                                        style="width: 120px;">บันทึก</button>
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- ยกที่ 2 -->
                                         <div class="col-md-4">
-                                            <div class="round-card p-3 round2"
-                                                style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
-                                                    <div class="edit-icon">
-                                                        <i class="fa-regular fa-pen-to-square fa-xl"></i>
-                                                    </div>
-                                                </a>
+                                            <div class="round-card p-3">
+                                                <button class="edit-button">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
                                                 <h1 class="round text-center text-white">ยกที่ 2</h1>
                                                 <div class="row">
-                                                    <div class="red-side col-6 ">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
+                                                    <div class="red-side col-6">
+                                                        <label class="text-white" for="R2_JR1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R2_JR1" name="R2_JR1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R2_JR2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R2_JR2" name="R2_JR2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R2_JR3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R2_JR3" name="R2_JR3" placeholder="กรอกคะแนน" disabled>
                                                     </div>
                                                     <div class="blue-side col-6">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
+                                                        <label class="text-white" for="R2_JB1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R2_JB1" name="R2_JB1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R2_JB2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R2_JB2" name="R2_JB2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R2_JB3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R2_JB3" name="R2_JB3" placeholder="กรอกคะแนน" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-3">
-                                                    <button class="btn btn-warning btn-save"
-                                                        style="width: 120px;">บันทึก</button>
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <!-- ยกที่ 3 -->
                                         <div class="col-md-4">
-                                            <div class="round-card p-3 round3"
-                                                style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
-                                                    <div class="edit-icon">
-                                                        <i class="fa-regular fa-pen-to-square fa-xl"></i>
-                                                    </div>
-                                                </a>
+                                            <div class="round-card p-3">
+                                                <button class="edit-button">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
                                                 <h1 class="round text-center text-white">ยกที่ 3</h1>
                                                 <div class="row">
-                                                    <div class="red-side col-6 ">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
+                                                    <div class="red-side col-6">
+                                                        <label class="text-white" for="R3_JR1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R3_JR1" name="R3_JR1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R3_JR2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R3_JR2" name="R3_JR2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R3_JR3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R3_JR3" name="R3_JR3" placeholder="กรอกคะแนน" disabled >
                                                     </div>
                                                     <div class="blue-side col-6">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอค��แนน"
-                                                            class="form-control mb-2" disabled>
+                                                        <label class="text-white" for="R3_JB1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R3_JB1" name="R3_JB1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R3_JB2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R3_JB2" name="R3_JB2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R3_JB3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R3_JB3" name="R3_JB3" placeholder="กรอกคะแนน" disabled>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-center mt-3">
-                                                    <button class="btn btn-warning btn-save"
-                                                        style="width: 120px;">บันทึก</button>
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="round-card p-3 round4"
-                                                style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
-                                                    <div class="edit-icon">
-                                                        <i class="fa-regular fa-pen-to-square fa-xl"></i>
-                                                    </div>
-                                                </a>
-                                                <h1 class="round text-center text-white">ยกที่ 4</h1>
-                                                <div class="row">
-                                                    <div class="red-side col-6 ">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                    </div>
-                                                    <div class="blue-side col-6">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะ��นน"
-                                                            class="form-control mb-2" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex justify-content-center mt-3">
-                                                    <button class="btn btn-warning btn-save"
-                                                        style="width: 120px;">บันทึก</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="round-card p-3 round5"
-                                                style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                                <a href="#" data-bs-toggle="modal" data-bs-target="#editModal">
-                                                    <div class="edit-icon">
-                                                        <i class="fa-regular fa-pen-to-square fa-xl"></i>
-                                                    </div>
-                                                </a>
-                                                <h1 class="round text-center text-white">ยกที่ 5</h1>
-                                                <div class="row">
-                                                    <div class="red-side col-6 ">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                    </div>
-                                                    <div class="blue-side col-6">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 2</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 3</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-2" disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="d-flex justify-content-center mt-3">
-                                                    <button class="btn btn-warning btn-save"
-                                                        style="width: 120px;">บันทึก</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="round-card p-3"
-                                                style=" background: linear-gradient(to right, red 50%, blue 50%); border-radius: 10px;">
-                                                <a href="">
-                                                </a>
-                                                <h1 class="round text-center text-white">สรุปคะแนน</h1>
-                                                <div class="row">
-                                                    <div class="red-side col-6 ">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-4" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 4</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-4" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 4</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-4" disabled>
-                                                    </div>
-                                                    <div class="blue-side col-6">
-                                                        <label class="text-white" lable="judge">JUDGE 1</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-4" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 4</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-4" disabled>
-                                                        <label class="text-white" lable="judge">JUDGE 4</label>
-                                                        <input type="number" placeholder="รอคะแนน"
-                                                            class="form-control mb-4" disabled>
-                                                    </div>
-                                                </div>
-
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="row">
+                                        <!-- ยกที่ 4 -->
+                                        <div class="col-md-4">
+                                            <div class="round-card p-3">
+                                                <button class="edit-button">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <h1 class="round text-center text-white">ยกที่ 4</h1>
+                                                <div class="row">
+                                                    <div class="red-side col-6">
+                                                        <label class="text-white" for="R4_JR1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R4_JR1" name="R4_JR1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R4_JR2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R4_JR2" name="R4_JR2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R4_JR3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R4_JR3" name="R4_JR3" placeholder="กรอกคะแนน" disabled>
+                                                    </div>
+                                                    <div class="blue-side col-6">
+                                                        <label class="text-white" for="R4_JB1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R4_JB1" name="R4_JB1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R4_JB2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R4_JB2" name="R4_JB2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R4_JB3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R4_JB3" name="R4_JB3" placeholder="กรอกคะแนน" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-center mt-3">
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- ยกที่ 5 -->
+                                        <div class="col-md-4">
+                                            <div class="round-card p-3">
+                                                <button class="edit-button">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <h1 class="round text-center text-white">ยกที่ 5</h1>
+                                                <div class="row">
+                                                    <div class="red-side col-6">
+                                                        <label class="text-white" for="R5_JR1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R5_JR1" name="R5_JR1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R5_JR2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R5_JR2" name="R5_JR2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R5_JR3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R5_JR3" name="R5_JR3" placeholder="กรอกคะแนน" disabled>
+                                                    </div>
+                                                    <div class="blue-side col-6">
+                                                        <label class="text-white" for="R5_JB1">JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-2" id="R5_JB1" name="R5_JB1" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R5_JB2">JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-2" id="R5_JB2" name="R5_JB2" placeholder="กรอกคะแนน" disabled>
+                                                        <label class="text-white" for="R5_JB3">JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-2" id="R5_JB3" name="R5_JB3" placeholder="กรอกคะแนน" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="d-flex justify-content-center mt-3">
+                                                    <button class="btn btn-warning btn-save">บันทึก</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+                                        <!-- สรุปคะแนน -->
+                                        <div class="col-md-4">
+                                            <div class="round-card p-3">
+                                                <h1 class="round text-center text-white" style="font-size: 2.7rem;">
+                                                    สรุปคะแนน</h1>
+                                                <div class="row">
+                                                    <div class="red-side col-6">
+                                                        <label class="text-white" for="Score_JR1">SUM JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-4" id="Score_JR1" name="Score_JR1"
+                                                            placeholder="สรุปคะแนน" disabled>
+                                                        <label class="text-white" for="Score_JR2">SUM JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-4" id="Score_JR2" name="Score_JR2"
+                                                            placeholder="สรุปคะแนน" disabled>
+                                                        <label class="text-white" for="Score_JR3">SUM JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-4" id="Score_JR3" name="Score_JR3"
+                                                            placeholder="สรุปคะแนน" disabled>
+                                                    </div>
+                                                    <div class="blue-side col-6">
+                                                        <label class="text-white" for="Score_JB1">SUM JUDGE 1</label>
+                                                        <input type="number" class="form-control mb-4" id="Score_JB1" name="Score_JB1"
+                                                            placeholder="สรุปคะแนน" disabled>
+                                                        <label class="text-white" for="Score_JB2">SUM JUDGE 2</label>
+                                                        <input type="number" class="form-control mb-4" id="Score_JB2" name="Score_JB2"
+                                                            placeholder="สรุปคะแนน" disabled>
+                                                        <label class="text-white" for="Score_JB3">SUM JUDGE 3</label>
+                                                        <input type="number" class="form-control mb-4" id="Score_JB3" name="Score_JB3"
+                                                            placeholder="สรุปคะแนน" disabled>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                 </div>
                             </div>
                         </div>
@@ -469,163 +441,275 @@
             .catch(error => {
                 console.error('Error loading footer:', error);
             });
-    </script>
 
-    <script>
-        $(document).ready(function () {
-            // เพิ่ม event listener ให้กับปุ่มที่มี class .btn-save
-            $('.btn-save').on('click', function () {
-                // จำลองการบันทึกข้อมูล
-                saveData()
-                    .then(() => {
-                        // แสดง SweetAlert เมื่อบันทึกสำเร็จ
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'บันทึกสำเร็จ',
-                            text: 'ข้อมูลของคุณถูกบันทึกเรียบร้อยแล้ว',
-                            confirmButtonText: 'ตกลง'
+        // Function to fetch and display active match
+        function fetchActiveMatch() {
+            fetch('../../service/confirm.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const matchContainer = document.getElementById('matchContainer');
+                        matchContainer.innerHTML = `
+                            <span class="text-danger">${data.redName}</span>
+                            <span class="text-vs">VS</span>
+                            <span class="text-primary">${data.blueName}</span>
+                        `;
+                    } else {
+                        console.error('No active match found');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Call the function when page loads
+        document.addEventListener('DOMContentLoaded', fetchActiveMatch);
+
+        function updateRound(roundNumber) {
+            fetch('../../service/update_round.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    round: roundNumber
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // อัพเดทข้อความบนปุ่ม dropdown
+                    document.getElementById('dropdownMenuButton').textContent = 'ยกที่ ' + roundNumber;
+                    
+                    // ปิดปุ่มบันทึกทั้งหมดก่อน
+                    document.querySelectorAll('.btn-save').forEach(button => {
+                        button.disabled = true;
+                        button.classList.remove('btn-warning');
+                        button.classList.add('btn-secondary');
+                    });
+                    
+                    // เปิดปุ่มบันทึกของยกที่เลือก
+                    const selectedRoundButton = document.querySelectorAll('.btn-save')[roundNumber - 1];
+                    if (selectedRoundButton) {
+                        selectedRoundButton.disabled = false;
+                        selectedRoundButton.classList.remove('btn-secondary');
+                        selectedRoundButton.classList.add('btn-warning');
+                    }
+                    
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'อัพเดทยกที่ ' + roundNumber + ' สำเร็จ',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด',
+                        text: data.message
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'เกิดข้อผิดพลาด',
+                    text: 'ไม่สามารถอัพเดทยกได้'
+                });
+            });
+        }
+
+        let isEditing = false; // เพิ่มตัวแปรเพื่อติดตามสถานะการแก้ไข
+
+        function fetchAndDisplayScores() {
+            // ถ้ากำลังแก้ไขอยู่ ไม่ต้องอัพเดทค่า
+            if (isEditing) return;
+
+            fetch('../../service/scores.php')
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success && result.data) {
+                        const scores = result.data;
+                        
+                        // Helper function to set input values
+                        const setValue = (id, value) => {
+                            const element = document.getElementById(id);
+                            if (element) {
+                                element.value = value !== null && value !== undefined ? value : '';
+                            }
+                        };
+
+                        // Set values for each round
+                        ['1', '2', '3', '4', '5'].forEach(round => {
+                            ['R', 'B'].forEach(color => {
+                                [1, 2, 3].forEach(judge => {
+                                    const fieldId = `R${round}_J${color}${judge}`;
+                                    setValue(fieldId, scores[fieldId]);
+                                });
+                            });
                         });
+
+                        // Set total scores
+                        ['R', 'B'].forEach(color => {
+                            [1, 2, 3].forEach(judge => {
+                                const fieldId = `Score_J${color}${judge}`;
+                                setValue(fieldId, scores[fieldId]);
+                            });
+                        });
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Call when page loads and every 5 seconds
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchAndDisplayScores();
+            setInterval(fetchAndDisplayScores, 5000);
+            
+            const editScoreModal = new bootstrap.Modal(document.getElementById('editScoreModal'));
+            let currentRound = null;
+            let currentSaveButton = null; // Store reference to current round's save button
+            
+            // Add event listeners for edit buttons
+            const editButtons = document.querySelectorAll('.edit-button');
+            
+            editButtons.forEach((button, index) => {
+                button.addEventListener('click', () => {
+                    isEditing = true; // เริ่มการแก้ไข
+                    currentRound = index + 1;
+                    const round = `R${currentRound}`;
+                    currentSaveButton = button.closest('.round-card').querySelector('.btn-save');
+                    
+                    // Populate modal with current values
+                    document.getElementById('redScore1').value = document.getElementById(`${round}_JR1`).value;
+                    document.getElementById('redScore2').value = document.getElementById(`${round}_JR2`).value;
+                    document.getElementById('redScore3').value = document.getElementById(`${round}_JR3`).value;
+                    document.getElementById('blueScore1').value = document.getElementById(`${round}_JB1`).value;
+                    document.getElementById('blueScore2').value = document.getElementById(`${round}_JB2`).value;
+                    document.getElementById('blueScore3').value = document.getElementById(`${round}_JB3`).value;
+                    
+                    // Add input event listeners to update main form fields in real-time
+                    ['red', 'blue'].forEach(color => {
+                        [1, 2, 3].forEach(judge => {
+                            const modalInput = document.getElementById(`${color}Score${judge}`);
+                            modalInput.addEventListener('input', () => {
+                                const mainField = document.getElementById(
+                                    `${round}_J${color.charAt(0).toUpperCase()}${judge}`
+                                );
+                                mainField.value = modalInput.value;
+                            });
+                        });
+                    });
+                    
+                    editScoreModal.show();
+                });
+            });
+            
+            // Handle save button click in modal
+            document.getElementById('saveEdit').addEventListener('click', () => {
+                const scoreData = {
+                    round: currentRound,
+                    scores: {
+                        [`R${currentRound}_JR1`]: document.getElementById('redScore1').value,
+                        [`R${currentRound}_JR2`]: document.getElementById('redScore2').value,
+                        [`R${currentRound}_JR3`]: document.getElementById('redScore3').value,
+                        [`R${currentRound}_JB1`]: document.getElementById('blueScore1').value,
+                        [`R${currentRound}_JB2`]: document.getElementById('blueScore2').value,
+                        [`R${currentRound}_JB3`]: document.getElementById('blueScore3').value
+                    }
+                };
+                
+                editScoreModal.hide();
+                // ยังคงสถานะ editing จนกว่าจะกดบันทึกในฟอร์มหลัก
+            });
+            
+            // Handle main form save buttons
+            document.querySelectorAll('.btn-save').forEach((button, index) => {
+                button.addEventListener('click', function() {
+                    const round = index + 1;
+                    const scoreData = {
+                        round: round,
+                        scores: {
+                            [`R${round}_JR1`]: document.getElementById(`R${round}_JR1`).value,
+                            [`R${round}_JR2`]: document.getElementById(`R${round}_JR2`).value,
+                            [`R${round}_JR3`]: document.getElementById(`R${round}_JR3`).value,
+                            [`R${round}_JB1`]: document.getElementById(`R${round}_JB1`).value,
+                            [`R${round}_JB2`]: document.getElementById(`R${round}_JB2`).value,
+                            [`R${round}_JB3`]: document.getElementById(`R${round}_JB3`).value
+                        }
+                    };
+                    
+                    fetch('../../service/update_scores.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(scoreData)
                     })
-                    .catch((error) => {
-                        // แสดง SweetAlert เมื่อเกิดข้อผิดพลาด
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            isEditing = false; // จบการแก้ไข
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'บันทึกคะแนนสำเร็จ',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            fetchAndDisplayScores();
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'เกิดข้อผิดพลาด',
+                                text: data.message
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
                         Swal.fire({
                             icon: 'error',
                             title: 'เกิดข้อผิดพลาด',
-                            text: 'ไม่สามารถบันทึกข้อมูลได้: ' + error,
-                            confirmButtonText: 'ตกลง'
+                            text: 'ไม่สามารถบันทึกคะแนนได้'
                         });
                     });
-            });
-
-            function saveData() {
-                return new Promise((resolve, reject) => {
-
-                    setTimeout(() => {
-
-                        resolve();
-                    }, 50);
-                });
-            }
-        });
-
-        $(document).ready(function () {
-            let currentCard; // การ์ดปัจจุันที่แก้ไข
-            let originalValues = {}; // เก็บค่าดั้งเดิมของการ์ด
-
-            // เมื่อคลิกปุ่ม Edit
-            $('.edit-icon').on('click', function () {
-                currentCard = $(this).closest('.round-card');
-
-                // เก็บค่าปัจจุบันใน originalValues
-                const redScores = currentCard.find('.red-side input');
-                const blueScores = currentCard.find('.blue-side input');
-
-                originalValues = {
-                    red: [
-                        $(redScores[0]).val(),
-                        $(redScores[1]).val(),
-                        $(redScores[2]).val()
-                    ],
-                    blue: [
-                        $(blueScores[0]).val(),
-                        $(blueScores[1]).val(),
-                        $(blueScores[2]).val()
-                    ]
-                };
-
-                // เติมค่าดั้งเดิมลงใน Modal
-                $('#redScore1').val(originalValues.red[0]);
-                $('#redScore2').val(originalValues.red[1]);
-                $('#redScore3').val(originalValues.red[2]);
-                $('#blueScore1').val(originalValues.blue[0]);
-                $('#blueScore2').val(originalValues.blue[1]);
-                $('#blueScore3').val(originalValues.blue[2]);
-
-                // แสดง Modal
-                $('#editScoreModal').modal('show');
-            });
-
-            // เมื่อกดปุ่ม "บันทึก"
-            $('#saveEdit').on('click', function () {
-                const redScores = currentCard.find('.red-side input');
-                const blueScores = currentCard.find('.blue-side input');
-
-                // อัปเดตค่าจาก Modal ลงการ์ด
-                $(redScores[0]).val($('#redScore1').val());
-                $(redScores[1]).val($('#redScore2').val());
-                $(redScores[2]).val($('#redScore3').val());
-                $(blueScores[0]).val($('#blueScore1').val());
-                $(blueScores[1]).val($('#blueScore2').val());
-                $(blueScores[2]).val($('#blueScore3').val());
-
-                // ปิด Modal
-                $('#editScoreModal').modal('hide');
-
-                // แสดงข้อความสำเร็จ
-                Swal.fire({
-                    icon: 'success',
-                    title: 'แก้ไขสำเร็จ',
-                    text: 'คะแนนถูกแก้ไขเรียบร้อยแล้ว',
-                    confirmButtonText: 'ตกลง'
                 });
             });
-
-            // เมื่อกดปุ่ม "ยกเลิก"
-            $('#cancelEdit').on('click', function () {
-                // ปิด Modal
-                $('#editScoreModal').modal('hide');
-
-
-                Swal.fire({
-                    icon: 'info',
-                    title: 'ยกเลิกการแก้ไข',
-                    text: 'คะแนนยังคงเหมือนเดิม',
-                    confirmButtonText: 'ตกลง'
-                });
+            
+            // Handle cancel button click
+            document.getElementById('cancelEdit').addEventListener('click', () => {
+                isEditing = false; // ยกเลิกการแก้ไข
+                editScoreModal.hide();
+                fetchAndDisplayScores(); // โหลดข้อมูลใหม่
             });
-        });
 
-        $('.btn-save').on('click', function () {
-            calculateTotalScores();
+            // เพิ่มการปิดปุ่มบันทึกทั้งหมดตอนโหลดหน้า
+            document.querySelectorAll('.btn-save').forEach(button => {
+                button.disabled = true;
+                button.classList.remove('btn-warning');
+                button.classList.add('btn-secondary');
+            });
+
+            // เพิ่มการเช็คยกปัจจุบันและเปิดปุ่มบันทึกที่เกี่ยวข้อง
+            fetch('../../service/get_current_round.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.round) {
+                        const currentRound = data.round;
+                        document.getElementById('dropdownMenuButton').textContent = 'ยกที่ ' + currentRound;
+                        
+                        const currentRoundButton = document.querySelectorAll('.btn-save')[currentRound - 1];
+                        if (currentRoundButton) {
+                            currentRoundButton.disabled = false;
+                            currentRoundButton.classList.remove('btn-secondary');
+                            currentRoundButton.classList.add('btn-warning');
+                        }
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     </script>
 
-    <script>
-    function loadActiveMatch() {
-        $.ajax({
-            url: 'get_active_match.php',
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                console.log('Response:', response); // Debug log
-                if (response && response.status === 'success' && response.data) {
-                    const match = response.data;
-                    const matchHtml = `
-                        <span class="match-item">
-                            ${match.person_red} <span class="text-vs">VS</span> ${match.person_blue}
-                        </span>
-                    `;
-                    $('#matchContainer').html(matchHtml);
-                } else {
-                    $('#matchContainer').html('<span class="text-muted">ไม่มีคู่มวยที่กำลังแข่งขัน</span>');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Ajax Error:', error);
-                console.error('Response Text:', xhr.responseText);
-                $('#matchContainer').html('<span class="text-danger">เกิดข้อผิดพลาดในการโหลดข้อมูล</span>');
-            }
-        });
-    }
-
-    $(document).ready(function() {
-        // โหลดข้อมูลคู่มวยเมื่อโหลดหน้าเว็บ
-        loadActiveMatch();
-        
-        // รีเฟรชข้อมูลทุก 10 วินาที
-        setInterval(loadActiveMatch, 10000);
-    });
-    </script>
 </body>
 
 </html>
