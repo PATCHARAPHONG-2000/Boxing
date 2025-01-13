@@ -345,7 +345,7 @@
 
         // Function to load matches
         function loadMatches() {
-            fetch('../../service/match.php')
+            fetch('../../service/matches.php')
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
